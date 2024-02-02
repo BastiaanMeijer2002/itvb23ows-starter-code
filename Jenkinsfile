@@ -9,5 +9,13 @@ pipeline {
                 }
             }
         }
+        stage('PHPUnit') {
+            steps {
+                script {
+                    sh "composer install --prefer-dist --no-progress"
+                    sh "/Hive/vendor/bin/phpunit"
+                }
+            }
+        }
     }
 }
