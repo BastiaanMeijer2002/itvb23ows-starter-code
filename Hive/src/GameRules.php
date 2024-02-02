@@ -87,4 +87,9 @@ class GameRules
     {
         return false;
     }
+
+    public function hasValidMove(array $board, Player $player): bool
+    {
+        return false;
+    }
 }
