@@ -92,4 +92,14 @@ class GameRules
     {
         return false;
     }
+
+    public function checkWin(GameState $gameState): Player
+    {
+        return $gameState->getCurrentPlayer();
+    }
+
+    public function checkTie(GameState $gameState): bool
+    {
+        return false;
+    }
 }
