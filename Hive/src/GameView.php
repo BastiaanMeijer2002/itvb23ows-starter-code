@@ -161,7 +161,7 @@ class GameView
                 if ($pq[1] < $min_q) $min_q = $pq[1];
             }
         }
-        var_dump($this->game->getBoard());
+
         if (is_array($this->game->getBoard())) {
             foreach (array_filter($this->game->getBoard()) as $pos => $tile) {
                 $pq = explode(',', $pos);

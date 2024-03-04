@@ -23,14 +23,12 @@ class GameActions
     public function makePlay(string $piece, string $to): bool|string
     {
         $board = $this->game->getBoard();
-        var_dump($board);
 
         $rules = new GameRules();
         $validity = $rules->validPlay($board, $to, $piece, $this->game->getCurrentPlayer());
 
         if ($validity) {
             $board[$to] = [[$this->game->getCurrentPlayer(), $piece]];
-            var_dump($board);
 
 
             $hand  = $this->game->getCurrentPlayer()->getHand();
@@ -67,9 +65,6 @@ class GameActions
             } else {
                 $board[$to] = [$tile];
             }
-
-            // Add debugging
-            var_dump("Board after move:", $board);
 
             $this->swapPlayer();
             $this->game->setLastMove($this->db->storeMove($this->game->getGameId(), "move", $from, $to, $this->game->getLastMove(), $this->getState()));
@@ -112,7 +107,6 @@ class GameActions
 
             $this->game->getPlayer1()->setHand($a);
             $this->game->getPlayer2()->setHand($b);
-            var_dump($c);
             $this->game->setBoard($c);
 
             if ($currentPlayer->getColor() == 0) {
