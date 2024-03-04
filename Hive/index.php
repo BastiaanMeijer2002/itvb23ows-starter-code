@@ -7,12 +7,16 @@ use HiveGame\Game;
 
 $db = new Database();
 
+$game = new Game($db);
 if (isset($_POST["game"])) {
-    $game = new Game($db);
-    $game->continueGame($_POST);
+    if ($_POST["game"] == "new") {
+        $game->startGame();
+    } else {
+        $game->continueGame($_POST);
+    }
 } else {
-    $game = new Game($db);
     $game->startGame();
 }
+
 
 

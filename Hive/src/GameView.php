@@ -136,7 +136,8 @@ class GameView
                 <form method="post" action="pass.php">
                     <input type="submit" value="Pass">
                 </form>
-                <form method="post" action="restart.php">
+                <form method="post" action="../index.php">
+                    <input type="hidden" name="game" value="new" />
                     <input type="submit" value="Restart">
                 </form>
 <!--                <strong>--><?php //echo $this->error; ?><!--</strong>-->
