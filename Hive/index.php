@@ -5,6 +5,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 use HiveGame\Database;
 use HiveGame\Game;
 
+session_start();
+
 $db = new Database();
 
 $game = new Game($db);

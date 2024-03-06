@@ -92,7 +92,11 @@ class GameState
      */
     public function getBoard(): array
     {
-        return $this->board;
+        if (isset($_SESSION["board"]) && is_array($_SESSION["board"])) {
+            return $_SESSION["board"];
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -100,7 +104,7 @@ class GameState
      */
     public function setBoard(array $board): void
     {
-        $this->board = $board;
+        $_SESSION["board"] = $board;
     }
 
     /**

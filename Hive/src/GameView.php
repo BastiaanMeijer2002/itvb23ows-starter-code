@@ -97,7 +97,10 @@ class GameView
                     Turn: <?php echo ($this->game->getCurrentPlayer()->getColor() == 0) ? "White" : "Black"; ?>
                 </div>
                 <form method="post" action="../index.php">
-                    <?php if ($this->game->getGameId() !== null) echo '<input type="hidden" name="game" value="'.$this->game->getGameId().'" />' ?>
+                    <?php if ($this->game->getGameId() !== null) {
+//                        var_dump($this->game->getBoard());
+                        echo '<input type="hidden" name="game" value="'.$this->game->getGameId().'" />';
+                    } ?>
                     <select name="piece">
                         <?php
 

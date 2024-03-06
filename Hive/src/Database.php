@@ -58,8 +58,10 @@ class Database
     {
         $move = $this->getMovesByGame($id)->fetch_array();
 
+
         $gameState = new GameState();
         $gameState->setGameId($id);
+
 
         $gameAction = new GameActions($this, $gameState);
         $gameAction->setState($move["state"] ?? '');

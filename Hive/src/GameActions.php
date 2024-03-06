@@ -38,7 +38,6 @@ class GameActions
 
             $this->game->setLastMove($this->db->storeMove($this->game->getGameId(), "play", $piece, $to, $this->game->getLastMove(), $this->getState()));
 
-
             $this->game->setBoard($board);
 
         }
@@ -107,7 +106,7 @@ class GameActions
 
             $this->game->getPlayer1()->setHand($a);
             $this->game->getPlayer2()->setHand($b);
-            $this->game->setBoard($c);
+//            $this->game->setBoard($c);
 
             if ($currentPlayer->getColor() == 0) {
                 $this->game->setCurrentPlayer($this->game->getPlayer1());
