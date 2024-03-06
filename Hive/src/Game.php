@@ -48,4 +48,9 @@ class Game
         $view = new GameView($gameActions->getGame());
         $view->render();
     }
+
+    public function restartGame(): void {
+        unset($_SESSION["board"]);
+        $this->startGame();
+    }
 }

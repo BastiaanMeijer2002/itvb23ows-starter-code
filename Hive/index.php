@@ -12,7 +12,7 @@ $db = new Database();
 $game = new Game($db);
 if (isset($_POST["game"])) {
     if ($_POST["game"] == "new") {
-        $game->startGame();
+        $game->restartGame();
     } else {
         $game->continueGame($_POST);
     }
