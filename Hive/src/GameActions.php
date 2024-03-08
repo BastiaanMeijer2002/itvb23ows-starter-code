@@ -8,37 +8,37 @@ use HiveGame\GameRules;
 class GameActions
 {
     private Database $db;
-    private GameState $game;
 
     /**
      * @param Database $db
-     * @param GameState $game
      */
-    public function __construct(Database $db, GameState $game)
+    public function __construct(Database $db)
     {
         $this->db = $db;
-        $this->game = $game;
     }
 
     public function makePlay(string $piece, string $to): bool|string
     {
-        $board = $this->game->getBoard();
+        $board = GameState::getBoard();
 
         $rules = new GameRules();
-        $validity = $rules->validPlay($board, $to, $piece, $this->game->getCurrentPlayer());
+        $validity = $rules->validPlay($board, $to, $piece);
 
         if ($validity) {
-            $board[$to] = [[$this->game->getCurrentPlayer(), $piece]];
+            $board[$to] = [[GameState::getPlayer(), $piece]];
 
 
-            $hand  = $this->game->getCurrentPlayer()->getHand();
+            $hand = GameState::getHand(GameState::getPlayer());
             $hand[$piece]--;
-            $this->game->getCurrentPlayer()->setHand($hand);
+            GameState::setHand(GameState::getPlayer(), $hand);
+
             $this->swapPlayer();
 
-            $this->game->setLastMove($this->db->storeMove($this->game->getGameId(), "play", $piece, $to, $this->game->getLastMove(), $this->getState()));
+            GameState::setBoard($board);
 
-            $this->game->setBoard($board);
+            $move = $this->db->storeMove(GameState::getGameId(), "play", $piece, $to, GameState::getLastMove(), GameState::getState());
+
+            GameState::setLastMove($move);
 
         }
 
@@ -47,16 +47,16 @@ class GameActions
 
     public function makeMove(string $from, string $to): string|bool
     {
-        $board = $this->game->getBoard();
+        $board = GameState::getBoard();
 
         $rules = new GameRules();
-        $validity = $rules->validMove($this->game->getBoard(), $to, $from, $this->game->getCurrentPlayer());
+        $validity = $rules->validMove(GameState::getBoard(), $to, $from);
 
         if (!$validity) {
             return $validity;
         }
 
-        if (isset($board[$from]) && !empty($board[$from])) {
+        if (!empty($board[$from])) {
             $tile = array_pop($board[$from]);
 
             if (isset($board[$to])) {
@@ -66,10 +66,10 @@ class GameActions
             }
 
             $this->swapPlayer();
-            $this->game->setLastMove($this->db->storeMove($this->game->getGameId(), "move", $from, $to, $this->game->getLastMove(), $this->getState()));
+            GameState::setLastMove($this->db->storeMove(GameState::getGameId(), "move", $from, $to, GameState::getLastMove(), GameState::getState()));
         }
 
-        $this->game->setBoard($board);
+        GameState::setBoard($board);
 
         return $validity;
     }
@@ -80,64 +80,26 @@ class GameActions
      */
     public function undoMove(): void
     {
-        if ($this->game->getLastMove() == 0) {
+        if (GameState::getLastMove() == 0) {
             throw new Exception("No previous move");
         }
 
-        $lastMove = $this->db->getMoves($this->game->getLastMove());
+        $lastMove = $this->db->getMoves(GameState::getLastMove());
 
         if (isset($lastMove["state"])) {
-            $this->game->setLastMove($lastMove["previous_id"]);
-            $this->setState($lastMove["state"]);
+            GameState::setLastMove($lastMove["previous_id"]);
+            GameState::setState($lastMove["state"]);
         }
 
-
     }
 
-    public function getState(): string
-    {
-        return serialize([$this->game->getPlayer1()->getHand(), $this->game->getPlayer2()->getHand(), $this->game->getBoard(), $this->game->getCurrentPlayer()]);
-    }
-
-    public function setState($state): void
-    {
-        if ($state != '') {
-            list($a, $b, $c, $currentPlayer) = unserialize($state);
-
-            $this->game->getPlayer1()->setHand($a);
-            $this->game->getPlayer2()->setHand($b);
-//            $this->game->setBoard($c);
-
-            if ($currentPlayer->getColor() == 0) {
-                $this->game->setCurrentPlayer($this->game->getPlayer1());
-            } else {
-                $this->game->setCurrentPlayer($this->game->getPlayer2());
-            }
-        }
-    }
 
     private function swapPlayer(): void
     {
-        if ($this->game->getCurrentPlayer() === $this->game->getPlayer1()) {
-            $this->game->setCurrentPlayer($this->game->getPlayer2());
+        if (GameState::getPlayer() == 0) {
+            GameState::setPlayer(1);
         } else {
-            $this->game->setCurrentPlayer($this->game->getPlayer1());
+            GameState::setPlayer(0);
         }
-    }
-
-    /**
-     * @return GameState
-     */
-    public function getGame(): GameState
-    {
-        return $this->game;
-    }
-
-    /**
-     * @param GameState $game
-     */
-    public function setGame(GameState $game): void
-    {
-        $this->game = $game;
     }
 }

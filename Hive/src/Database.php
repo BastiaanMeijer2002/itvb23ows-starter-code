@@ -42,7 +42,7 @@ class Database
 
     public function getMovesByGame(int $id): bool|mysqli_result
     {
-        $stmt = $this->getDb()->prepare('SELECT * FROM moves WHERE game_id = ? ');
+        $stmt = $this->getDb()->prepare('SELECT * FROM moves WHERE game_id = ? ORDER BY id DESC ');
         $stmt->bind_param('i', $id);
         $stmt->execute();
         return $stmt->get_result();
@@ -54,19 +54,16 @@ class Database
         return  $this->getDb()->insert_id;
     }
 
-    public function getGame(int $id): GameState
+    public function getGame(int $id): void
     {
         $move = $this->getMovesByGame($id)->fetch_array();
 
+        if ($move) {
+            GameState::setState($move["state"]);
+        }
 
-        $gameState = new GameState();
-        $gameState->setGameId($id);
+        GameState::setGameId($id);
 
-
-        $gameAction = new GameActions($this, $gameState);
-        $gameAction->setState($move["state"] ?? '');
-
-        return $gameAction->getGame();
     }
 
     /**

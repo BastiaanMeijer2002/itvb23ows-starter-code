@@ -19,7 +19,7 @@ services:
       MYSQL_CHARSET: utf8mb4
     ports:
       - "3306:3306"
-#  ai:
-#    build: ./AI
-#    ports:
-#      - "6000:6000"
+  ai:
+    build: ./AI
+    ports:
+      - "6000:6000"

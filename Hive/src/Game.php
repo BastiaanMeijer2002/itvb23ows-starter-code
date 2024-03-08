@@ -22,10 +22,13 @@ class Game
     {
         $utils = new Utils();
 
-        $game = new GameState();
-        $game->setGameId($this->db->createGame());
+        GameState::setGameId($this->db->createGame());
+        GameState::setPlayer1hand(["Q" => 1, "B" => 2, "S" => 2, "A" => 3, "G" => 3]);
+        GameState::setPlayer2hand(["Q" => 1, "B" => 2, "S" => 2, "A" => 3, "G" => 3]);
+        GameState::setBoard([]);
+        GameState::setPlayer(0);
 
-        $view = new GameView($game);
+        $view = new GameView();
         $view->render();
     }
 
@@ -33,8 +36,10 @@ class Game
     {
         $utils = new Utils();
 
-        $gameState = $this->db->getGame($move["game"]);
-        $gameActions = new GameActions($this->db, $gameState);
+        var_dump($move);
+
+        $this->db->getGame($move["game"]);
+        $gameActions = new GameActions($this->db);
 
         switch ($move["action"]) {
             case "Play":
@@ -45,12 +50,12 @@ class Game
                 break;
         }
 
-        $view = new GameView($gameActions->getGame());
+        $view = new GameView();
         $view->render();
     }
 
     public function restartGame(): void {
-        unset($_SESSION["board"]);
+        session_unset();
         $this->startGame();
     }
 }

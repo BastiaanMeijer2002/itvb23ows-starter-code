@@ -2,95 +2,98 @@
 
 namespace HiveGame;
 
+/**
+ * Manages the state of the game.
+ */
 class GameState
 {
-    private int $gameId;
-    private Player $player1;
-    private Player $player2;
-    private Player $currentPlayer;
-    private int $lastMove;
-    private array $board;
 
-
-    public function __construct()
+    /**
+     * @return array
+     */
+    public static function getPlayer1hand(): array
     {
-        $this->player1 = new Player(0);
-        $this->player2 = new Player(1);
-        $this->board = [];
-        $this->lastMove = 0;
-
-        $this->currentPlayer = $this->player1;
-
+        return $_SESSION["hand"][0];
     }
 
     /**
-     * @return Player
+     * @param array $player1hand
      */
-    public function getPlayer1(): Player
+    public static function setPlayer1hand(array $player1hand): void
     {
-        return $this->player1;
-    }
-
-    /**
-     * @param Player $player1
-     */
-    public function setPlayer1(Player $player1): void
-    {
-        $this->player1 = $player1;
-    }
-
-    /**
-     * @return Player
-     */
-    public function getPlayer2(): Player
-    {
-        return $this->player2;
-    }
-
-    /**
-     * @param Player $player2
-     */
-    public function setPlayer2(Player $player2): void
-    {
-        $this->player2 = $player2;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLastMove(): int
-    {
-        return $this->lastMove;
-    }
-
-    /**
-     * @param int $lastMove
-     */
-    public function setLastMove(int $lastMove): void
-    {
-        $this->lastMove = $lastMove;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGameId(): int
-    {
-        return $this->gameId;
-    }
-
-    /**
-     * @param int $gameId
-     */
-    public function setGameId(int $gameId): void
-    {
-        $this->gameId = $gameId;
+        $_SESSION["hand"][0] = $player1hand;
     }
 
     /**
      * @return array
      */
-    public function getBoard(): array
+    public static function getPlayer2hand(): array
+    {
+        return $_SESSION["hand"][1];
+    }
+
+    /**
+     * @param array $player2hand
+     */
+    public static function setPlayer2hand(array $player2hand): void
+    {
+        $_SESSION["hand"][1] = $player2hand;
+    }
+
+    /**
+     * @param int $player
+     * @return array
+     */
+    public static function getHand(int $player): array
+    {
+        return $_SESSION["hand"][$player];
+    }
+
+    /**
+     * @param int $player
+     * @param array $hand
+     */
+    public static function setHand(int $player, array $hand): void
+    {
+        $_SESSION["hand"][$player] = $hand;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getLastMove(): int
+    {
+        return $_SESSION["lastMove"] ?? 0;
+    }
+
+    /**
+     * @param int $lastMove
+     */
+    public static function setLastMove(int $lastMove): void
+    {
+        $_SESSION["lastMove"] = $lastMove;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getGameId(): int
+    {
+        return $_SESSION["id"];
+    }
+
+    /**
+     * @param int $gameId
+     */
+    public static function setGameId(int $gameId): void
+    {
+        $_SESSION["id"] = $gameId;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getBoard(): array
     {
         if (isset($_SESSION["board"]) && is_array($_SESSION["board"])) {
             return $_SESSION["board"];
@@ -102,24 +105,53 @@ class GameState
     /**
      * @param array $board
      */
-    public function setBoard(array $board): void
+    public static function setBoard(array $board): void
     {
         $_SESSION["board"] = $board;
     }
 
+
     /**
-     * @return Player
+     * @return int
      */
-    public function getCurrentPlayer(): Player
+    public static function getPlayer(): int
     {
-        return $this->currentPlayer;
+        return $_SESSION["player"];
     }
 
     /**
-     * @param Player $currentPlayer
+     * @param int $player
      */
-    public function setCurrentPlayer(Player $currentPlayer): void
+    public static function setPlayer(int $player): void
     {
-        $this->currentPlayer = $currentPlayer;
+        $_SESSION["player"] = $player;
     }
+
+    /**
+     * @return string
+     */
+    public static function getState(): string
+    {
+        return serialize([
+            "hand1" => self::getPlayer1hand(),
+            "hand2" => self::getPlayer2hand(),
+            "board" => self::getBoard(),
+            "player" => self::getPlayer(),
+        ]);
+    }
+
+    /**
+     * @param string $state
+     * @return void
+     */
+    public static function setState(string $state): void
+    {
+        $state = unserialize($state);
+
+        self::setPlayer1hand($state["hand1"]);
+        self::setPlayer2hand($state["hand2"]);
+        self::setBoard($state["board"]);
+        self::setPlayer($state["player"]);
+    }
+
 }
