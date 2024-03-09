@@ -17,7 +17,7 @@ pipeline {
         stage('Install Composer') {
             steps {
                 dir("Hive") {
-                    sh "composer install"
+                    sh 'composer install --prefer-dist --no-progress'
                 }
             }
         }
