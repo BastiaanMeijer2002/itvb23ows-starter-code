@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'php:8.3.0-alpine3.18' } }
+    agent { docker { image 'composer:latest' } }
     stages {
         stage('Checkout') {
             steps {
@@ -14,20 +14,15 @@ pipeline {
 //                 }
 //             }
 //         }
-//         stage('Install PHP') {
-//             steps {
-//                 sh 'sudo apt-get update && sudo apt-get install -y php'
-//             }
-//         }
         stage('Install Composer') {
             steps {
-                sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
+                sh "composer install --prefer-dist --no-progress"
             }
         }
         stage('PHPUnit') {
             steps {
                 script {
-                    sh "composer install --prefer-dist --no-progress"
+
                     sh "/Hive/vendor/bin/phpunit"
                 }
             }

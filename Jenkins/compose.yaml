@@ -1,6 +1,25 @@
 version: '3'
 
 services:
+
+  jenkins-docker:
+    image: docker:dind
+    restart: always
+    privileged: true
+    networks:
+      jenkins:
+        aliases:
+          - docker
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+      - DOCKER_LAUNCH_DIAGNOSTICS=true
+    volumes:
+      - jenkins-docker-certs:/certs/client
+    ports:
+      - "2376:2376"
+    extra_hosts:
+      - "docker:172.0.0.11"
+
   jenkins:
     build:
       context: .
@@ -19,22 +38,10 @@ services:
       - jenkins-data:/var/jenkins_home
       - jenkins-docker-certs:/certs/client:ro
 
-  jenkins-docker:
-    image: docker:dind
-    restart: always
-    privileged: true
-    networks:
-      - jenkins
-    environment:
-      - DOCKER_TLS_CERTDIR=/certs
-    volumes:
-      - jenkins-docker-certs:/certs/client
-    ports:
-      - "2376:2376"
-
 networks:
   jenkins:
     driver: bridge
+
 
 volumes:
   jenkins-data:
