@@ -2,10 +2,10 @@ pipeline {
     agent any
     stages {
         stage('Checkout') {
-                        steps {
-                            checkout scm
-                        }
-                    }
+            steps {
+                checkout scm
+            }
+        }
 //         stage('SonarQube') {
 //             steps {
 //                 script { scannerHome = tool 'SonarQubeScanner' }
@@ -14,6 +14,11 @@ pipeline {
 //                 }
 //             }
 //         }
+        stage('Install PHP') {
+            steps {
+                sh 'sudo apt-get update && sudo apt-get install -y php'
+            }
+        }
         stage('Install Composer') {
             steps {
                 sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
