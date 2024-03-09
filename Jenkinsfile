@@ -24,8 +24,7 @@ pipeline {
         stage('PHPUnit') {
             steps {
                 script {
-
-                    sh "/Hive/vendor/bin/phpunit"
+                    sh "Hive/vendor/bin/phpunit"
                 }
             }
         }
