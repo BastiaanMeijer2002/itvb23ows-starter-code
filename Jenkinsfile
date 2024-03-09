@@ -16,7 +16,9 @@ pipeline {
 //         }
         stage('Install Composer') {
             steps {
-                sh "composer install"
+                dir("Hive") {
+                    sh "composer install"
+                }
             }
         }
         stage('PHPUnit') {
