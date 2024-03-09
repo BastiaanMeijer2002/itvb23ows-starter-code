@@ -1,5 +1,10 @@
 pipeline {
-    agent { docker { image 'composer:latest', args '--entrypoint=""' } }
+    agent {
+            docker {
+                image 'composer:latest'
+                args '--entrypoint=""'
+            }
+        }
     stages {
         stage('Checkout') {
             steps {
