@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'php:latest'
+        }
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -14,11 +18,11 @@ pipeline {
 //                 }
 //             }
 //         }
-        stage('Install PHP') {
-            steps {
-                sh 'sudo apt-get update && sudo apt-get install -y php'
-            }
-        }
+//         stage('Install PHP') {
+//             steps {
+//                 sh 'sudo apt-get update && sudo apt-get install -y php'
+//             }
+//         }
         stage('Install Composer') {
             steps {
                 sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
