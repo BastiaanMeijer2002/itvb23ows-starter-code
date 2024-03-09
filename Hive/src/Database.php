@@ -9,27 +9,31 @@ class Database
 {
     private mysqli $db;
 
-    public function __construct()
+    public function __construct(mysqli $db = null)
     {
-        $env = include_once 'env.php';
+        if ($db == null) {
+            $env = include_once 'env.php';
 
-        $mysqli = new mysqli($env["hostname"], $env["username"], $env["password"], $env["database"]);
+            $mysqli = new mysqli($env["hostname"], $env["username"], $env["password"], $env["database"]);
 
-        if ($mysqli->connect_error) {
-            die("Connection failed: " . $mysqli->connect_error);
+            if ($mysqli->connect_error) {
+                die("Connection failed: " . $mysqli->connect_error);
+            }
+
+            $mysqli->set_charset('utf8mb4');
+
+            $this->db = $mysqli;
+        } else {
+            $this->db = $db;
         }
 
-        $mysqli->set_charset('utf8mb4');
-
-        $this->db = $mysqli;
     }
 
-    public function storeMove(int $gameId, string $type, string $from, string $to, int $previous, string $state) {
+    public function storeMove(int $gameId, string $type, string $from, string $to, int $previous, string $state): bool
+    {
         $stmt = $this->getDb()->prepare('insert into moves (game_id, type, move_from, move_to, previous_id, state) values (?, ?, ?, ?, ?, ?)');
         $stmt->bind_param('isssis', $gameId, $type, $from, $to, $previous, $state);
-        $stmt->execute();
-
-        return $this->getDb()->insert_id;
+        return $stmt->execute();
     }
 
     public function getMoves(int $id): bool|mysqli_result
@@ -77,7 +81,7 @@ class Database
     /**
      * @param mysqli $db
      */
-    private function setDb(mysqli $db): void
+    public function setDb(mysqli $db): void
     {
         $this->db = $db;
     }

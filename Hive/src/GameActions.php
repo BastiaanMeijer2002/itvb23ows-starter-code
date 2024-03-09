@@ -36,9 +36,8 @@ class GameActions
 
             GameState::setBoard($board);
 
-            $move = $this->db->storeMove(GameState::getGameId(), "play", $piece, $to, GameState::getLastMove(), GameState::getState());
-
-            GameState::setLastMove($move);
+            $this->db->storeMove(GameState::getGameId(), "play", $piece, $to, GameState::getLastMove(), GameState::getState());
+            GameState::setLastMove($this->db->getDb()->insert_id);
 
         }
 
@@ -66,7 +65,9 @@ class GameActions
             }
 
             $this->swapPlayer();
-            GameState::setLastMove($this->db->storeMove(GameState::getGameId(), "move", $from, $to, GameState::getLastMove(), GameState::getState()));
+
+            $this->db->storeMove(GameState::getGameId(), "move", $from, $to, GameState::getLastMove(), GameState::getState());
+            GameState::setLastMove($this->db->getDb()->insert_id);
         }
 
         GameState::setBoard($board);
