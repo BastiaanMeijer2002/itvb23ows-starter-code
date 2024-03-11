@@ -1,0 +1,4 @@
+tool:
+  sonarQubeInstallation:
+    - name: "SonarScanner"
+    - home: "/usr/local/bin/sonar-scanner"
