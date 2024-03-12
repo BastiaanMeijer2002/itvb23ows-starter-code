@@ -8,9 +8,19 @@ tool:
               installers:
                 - sonarRunnerInstaller:
                     id: "5.0.1.3006"
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - string:
+              scope: GLOBAL
+              id: "sonarqube-token"
+              secret: "sqa_0e4dd5c28dece16c0df74d509eb972bcbde69d58"
+              description: "SonarQube token"
 unclassified:
   sonarglobalconfiguration:
     buildWrapperEnabled: true
     installations:
       - name: "SonarScanner"
-        serverUrl: "http://0.0.0.0:9000"
+        serverUrl: "http://sonarqube:9000"
+        credentialsId: "sonarqube-token"
