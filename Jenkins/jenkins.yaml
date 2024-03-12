@@ -13,13 +13,4 @@ unclassified:
     buildWrapperEnabled: true
     installations:
       - name: "SonarScanner"
-        serverUrl: "http://sonarqube:9000"
-        credentialsId: ""
-        serverAuthenticationToken: ""
-        additionalAnalysisProperties:
-        additionalProperties:
-        mojoVersion:
-        triggers:
-        envVar:
-        skipScmCause: false
-        skipUpstreamCause: false
+        serverUrl: "http://0.0.0.0:9000"
