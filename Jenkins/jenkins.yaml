@@ -1,4 +1,25 @@
 tool:
-  sonarQubeInstallation:
-    - name: "SonarScanner"
-    - home: "/usr/local/bin/sonar-scanner"
+  sonarRunnerInstallation:
+    installations:
+      - name: "SonarScanner"
+        home: "/var/jenkins_home/tools/"
+        properties:
+          - installSource:
+              installers:
+                - sonarRunnerInstaller:
+                    id: "5.0.1.3006"
+unclassified:
+  sonarglobalconfiguration:
+    buildWrapperEnabled: true
+    installations:
+      - name: "SonarScanner"
+        serverUrl: "http://sonarqube:9000"
+        credentialsId: ""
+        serverAuthenticationToken: ""
+        additionalAnalysisProperties:
+        additionalProperties:
+        mojoVersion:
+        triggers:
+        envVar:
+        skipScmCause: false
+        skipUpstreamCause: false

@@ -35,6 +35,8 @@ services:
     volumes:
       - jenkins-data:/var/jenkins_home
       - jenkins-docker-certs:/certs/client:ro
+      - ./jenkins.yaml:/var/jenkins_home/casc_configs/jenkins.yaml
+
   sonarqube:
     image: sonarqube:latest
     ports:
