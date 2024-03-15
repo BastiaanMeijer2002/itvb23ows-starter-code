@@ -1,6 +1,7 @@
 FROM jenkins/jenkins:latest
-ENV JAVA_OPTS -Dcasc.jenkins.config=/var/jenkins_home/casc_configs
+ENV JAVA_OPTS "-Dcasc.jenkins.config=/var/jenkins_home/casc_configs -Djenkins.install.runSetupWizard=false"
 COPY jenkins.yaml /var/jenkins_home/casc_configs/jenkins.yaml
+COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 USER root
 RUN apt-get update && apt-get install -y lsb-release
 RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
@@ -12,7 +13,5 @@ RUN echo "deb [arch=$(dpkg --print-architecture) \
 RUN apt-get update && apt-get install -y docker-ce-cli
 RUN apt-get install -y php php-mbstring php-xml php-bcmath php-mysqli && apt-get install -y composer
 USER jenkins
-RUN jenkins-plugin-cli --plugins "blueocean docker-workflow sonar configuration-as-code"
-RUN echo "sonar.host.url=http://sonarqube:9000" >> /var/jenkins_home/sonar-scanner.properties
-
+RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
 

@@ -12,10 +12,11 @@ credentials:
   system:
     domainCredentials:
       - credentials:
-          - string:
+          - usernamePassword:
               scope: GLOBAL
-              id: "sonarqube-token"
-              secret: "sqa_0e4dd5c28dece16c0df74d509eb972bcbde69d58"
+              id: "SonarScanner"
+              username: "admin"
+              password: "bas"
               description: "SonarQube token"
 unclassified:
   sonarglobalconfiguration:
@@ -23,4 +24,26 @@ unclassified:
     installations:
       - name: "SonarScanner"
         serverUrl: "http://sonarqube:9000"
-        credentialsId: "sonarqube-token"
+        credentialsId: "SonarScanner"
+jobs:
+  - script: >
+      multibranchPipelineJob('HiveGame') {
+        branchSources {
+          git {
+            id = 'github'
+            remote('https://github.com/BastiaanMeijer2002/itvb23ows-starter-code.git')
+          }
+        }
+        orphanedItemStrategy {
+          discardOldItems {
+            numToKeep(20)
+          }
+        }
+        factory {
+          workflowBranchProjectFactory {
+            scriptPath('Jenkinsfile')
+          }
+        }
+      }
+jenkins:
+  authorizationStrategy: unsecured
