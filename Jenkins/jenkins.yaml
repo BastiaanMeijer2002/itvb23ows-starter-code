@@ -8,16 +8,6 @@ tool:
               installers:
                 - sonarRunnerInstaller:
                     id: "5.0.1.3006"
-credentials:
-  system:
-    domainCredentials:
-      - credentials:
-          - usernamePassword:
-              scope: GLOBAL
-              id: "SonarScanner"
-              username: "admin"
-              password: "bas"
-              description: "SonarQube token"
 unclassified:
   sonarglobalconfiguration:
     buildWrapperEnabled: true
@@ -47,3 +37,10 @@ jobs:
       }
 jenkins:
   authorizationStrategy: unsecured
+  globalNodeProperties:
+    - environmentVariables:
+        env:
+          - key: "SONAR_LOGIN"
+            value: "admin"
+          - key: "SONAR_PASSWORD"
+            value: "bas"
