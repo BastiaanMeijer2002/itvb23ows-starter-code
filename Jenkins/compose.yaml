@@ -44,6 +44,7 @@ services:
       - SONAR_JDBC_URL=jdbc:postgresql://sonarqube-db:5432/sonarqube
       - SONAR_JDBC_USERNAME=sonarqube
       - SONAR_JDBC_PASSWORD=sonarqube
+      - SONAR_AUTH_JWTBASE64HS256SECRET="mqdUwdOVrNmv9Ts0hbE73VrVmYW9d0B2deLbj0Wyvpg="
     networks:
       - jenkins
     volumes:
@@ -62,13 +63,9 @@ services:
       - "5432:5432"
     networks:
       - jenkins
-
-
 networks:
   jenkins:
     driver: bridge
-
-
 volumes:
   jenkins-data:
   jenkins-docker-certs:

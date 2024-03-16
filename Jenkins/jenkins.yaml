@@ -8,6 +8,14 @@ tool:
               installers:
                 - sonarRunnerInstaller:
                     id: "5.0.1.3006"
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - string:
+              scope: GLOBAL
+              id: "SonarScanner"
+              secret: "mqdUwdOVrNmv9Ts0hbE73VrVmYW9d0B2deLbj0Wyvpg="
 unclassified:
   sonarglobalconfiguration:
     buildWrapperEnabled: true
@@ -41,6 +49,6 @@ jenkins:
     - environmentVariables:
         env:
           - key: "SONAR_LOGIN"
-            value: "admin"
+            value: "jenkins"
           - key: "SONAR_PASSWORD"
-            value: "bas"
+            value: "jenkins"
