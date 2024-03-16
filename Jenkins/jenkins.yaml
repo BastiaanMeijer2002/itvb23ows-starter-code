@@ -15,7 +15,7 @@ credentials:
           - string:
               scope: GLOBAL
               id: "SonarScanner"
-              secret: "mqdUwdOVrNmv9Ts0hbE73VrVmYW9d0B2deLbj0Wyvpg="
+              secret: "Jc88RMjzkxPoy/fCPiL+iy7osojuUgawpjl1g6H38O8="
 unclassified:
   sonarglobalconfiguration:
     buildWrapperEnabled: true
@@ -52,3 +52,5 @@ jenkins:
             value: "jenkins"
           - key: "SONAR_PASSWORD"
             value: "jenkins"
+          - key: "SONAR_TOKEN"
+            value: "Jc88RMjzkxPoy/fCPiL+iy7osojuUgawpjl1g6H38O8="
