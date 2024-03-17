@@ -8,21 +8,12 @@ tool:
               installers:
                 - sonarRunnerInstaller:
                     id: "5.0.1.3006"
-credentials:
-  system:
-    domainCredentials:
-      - credentials:
-          - string:
-              scope: GLOBAL
-              id: "SonarScanner"
-              secret: "Jc88RMjzkxPoy/fCPiL+iy7osojuUgawpjl1g6H38O8="
 unclassified:
   sonarglobalconfiguration:
     buildWrapperEnabled: true
     installations:
       - name: "SonarScanner"
         serverUrl: "http://sonarqube:9000"
-        credentialsId: "SonarScanner"
 jobs:
   - script: >
       multibranchPipelineJob('HiveGame') {
@@ -45,12 +36,3 @@ jobs:
       }
 jenkins:
   authorizationStrategy: unsecured
-  globalNodeProperties:
-    - environmentVariables:
-        env:
-          - key: "SONAR_LOGIN"
-            value: "jenkins"
-          - key: "SONAR_PASSWORD"
-            value: "jenkins"
-          - key: "SONAR_TOKEN"
-            value: "Jc88RMjzkxPoy/fCPiL+iy7osojuUgawpjl1g6H38O8="
