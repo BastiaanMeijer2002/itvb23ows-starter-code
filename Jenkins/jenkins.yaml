@@ -36,3 +36,4 @@ jobs:
       }
 jenkins:
   authorizationStrategy: unsecured
+
