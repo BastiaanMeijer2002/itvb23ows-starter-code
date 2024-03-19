@@ -1,0 +1,39 @@
+tool:
+  sonarRunnerInstallation:
+    installations:
+      - name: "SonarScanner"
+        home: "/var/jenkins_home/tools/"
+        properties:
+          - installSource:
+              installers:
+                - sonarRunnerInstaller:
+                    id: "5.0.1.3006"
+unclassified:
+  sonarglobalconfiguration:
+    buildWrapperEnabled: true
+    installations:
+      - name: "SonarScanner"
+        serverUrl: "http://sonarqube:9000"
+jobs:
+  - script: >
+      multibranchPipelineJob('HiveGame') {
+        branchSources {
+          git {
+            id = 'github'
+            remote('https://github.com/BastiaanMeijer2002/itvb23ows-starter-code.git')
+          }
+        }
+        orphanedItemStrategy {
+          discardOldItems {
+            numToKeep(20)
+          }
+        }
+        factory {
+          workflowBranchProjectFactory {
+            scriptPath('Jenkinsfile')
+          }
+        }
+      }
+jenkins:
+  authorizationStrategy: unsecured
+

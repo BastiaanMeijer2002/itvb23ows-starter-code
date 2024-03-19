@@ -1,20 +1,38 @@
 pipeline {
     agent any
     stages {
-        stage('SonarQube') {
+        stage('Checkout') {
             steps {
-                script { scannerHome = tool 'SonarQubeScanner' }
-                withSonarQubeEnv('SonarQube') {
-                    sh "${scannerHome}/bin/./sonar-scanner -Dsonar.projectKey=ows"
+                checkout scm
+            }
+        }
+        stage('Install Composer') {
+            steps {
+                dir("Hive") {
+                    sh 'composer install'
                 }
             }
         }
         stage('PHPUnit') {
             steps {
                 script {
-                    sh "composer install --prefer-dist --no-progress"
-                    sh "/Hive/vendor/bin/phpunit"
+                    sh "Hive/vendor/bin/phpunit Hive/tests"
                 }
+            }
+        }
+        stage('SonarQube scan') {
+            steps {
+                script { scannerHome = tool 'SonarScanner' }
+                withSonarQubeEnv('SonarScanner') {
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ows -Dsonar.sources=Hive -Dsonar.login=jenkins -Dsonar.password=jenkins"
+                }
+            }
+        }
+        stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+              }
             }
         }
     }

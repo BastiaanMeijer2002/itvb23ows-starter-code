@@ -4,19 +4,14 @@ namespace HiveGame;
 
 class GameView
 {
-    private GameState $game;
     private array $to = [];
 
-    /**
-     * @param GameState $game
-     */
-    public function __construct(GameState $game)
+    public function __construct()
     {
-        $this->game = $game;
 
         $to = [];
         foreach ($GLOBALS['OFFSETS'] as $pq) {
-            foreach (array_keys($this->game->getBoard()) as $pos) {
+            foreach (array_keys(GameState::getBoard()) as $pos) {
                 $pq2 = explode(',', $pos);
                 $this->to[] = strval($pq[0]).','.strval($pq[1]);
             }
@@ -89,19 +84,20 @@ class GameView
                 </div>
                 <div class="hand">
                     <?php
-                    $this->renderHand($this->game->getPlayer1());
-                    $this->renderHand($this->game->getPlayer2());
+                    $this->renderHand(GameState::getPlayer1hand(), 0);
+                    $this->renderHand(GameState::getPlayer2hand(), 1);
                     ?>
                 </div>
                 <div class="turn">
-                    Turn: <?php echo ($this->game->getCurrentPlayer()->getColor() == 0) ? "White" : "Black"; ?>
+                    Turn: <?php echo (GameState::getPlayer() == 0) ? "White" : "Black"; ?>
                 </div>
                 <form method="post" action="../index.php">
-                    <?php if ($this->game->getGameId() !== null) echo '<input type="hidden" name="game" value="'.$this->game->getGameId().'" />' ?>
+                    <?php if (GameState::getGameId() !== null) echo '<input type="hidden" name="game" value="'.GameState::getGameId().'" />'; ?>
                     <select name="piece">
                         <?php
+                        $hand = GameState::getPlayer() == 0 ? GameState::getPlayer1hand() : GameState::getPlayer2hand();
 
-                        foreach ($this->game->getCurrentPlayer()->getHand() as $tile => $ct) {
+                        foreach ($hand as $tile => $ct) {
                             echo "<option value=\"$tile\">$tile</option>";
                         }
                         ?>
@@ -116,10 +112,10 @@ class GameView
                     <input type="submit" name="action" value="Play">
                 </form>
                 <form method="post" action="../index.php">
-                    <?php if ($this->game->getGameId() !== null) echo '<input type="hidden" name="game" value="'.$this->game->getGameId().'" />' ?>
+                    <?php if (GameState::getGameId() !== null) echo '<input type="hidden" name="game" value="'.GameState::getGameId().'" />' ?>
                     <select name="from">
                         <?php
-                        foreach (array_keys($this->game->getBoard()) as $pos) {
+                        foreach (array_keys(GameState::getBoard()) as $pos) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
@@ -136,7 +132,8 @@ class GameView
                 <form method="post" action="pass.php">
                     <input type="submit" value="Pass">
                 </form>
-                <form method="post" action="restart.php">
+                <form method="post" action="../index.php">
+                    <input type="hidden" name="game" value="new" />
                     <input type="submit" value="Restart">
                 </form>
 <!--                <strong>--><?php //echo $this->error; ?><!--</strong>-->
@@ -154,20 +151,20 @@ class GameView
 
         $min_p = 1000;
         $min_q = 1000;
-        foreach ($this->game->getBoard() as $pos => $tile) {
+        foreach (GameState::getBoard() as $pos => $tile) {
             $pq = explode(',', $pos);
             if (isset($pq[0]) && isset($pq[1])) {
                 if ($pq[0] < $min_p) $min_p = $pq[0];
                 if ($pq[1] < $min_q) $min_q = $pq[1];
             }
         }
-        var_dump($this->game->getBoard());
-        if (is_array($this->game->getBoard())) {
-            foreach (array_filter($this->game->getBoard()) as $pos => $tile) {
+
+        if (is_array(GameState::getBoard())) {
+            foreach (array_filter(GameState::getBoard()) as $pos => $tile) {
                 $pq = explode(',', $pos);
                 $h = count($tile);
                 $html .= '<div class="tile player';
-                $html .= $tile[$h-1][0]->getColor();
+                $html .= $tile[$h-1][0];
                 if ($h > 1) echo ' stacked';
                 $html .= '" style="left: ';
                 $html .= ($pq[0] - $min_p) * 4 + ($pq[1] - $min_q) * 2;
@@ -182,11 +179,11 @@ class GameView
         echo $html;
     }
 
-    private function renderHand(Player $player): void
+    private function renderHand(array $hand, int $player): void
     {
-        foreach ($player->getHand() as $tile => $ct) {
+        foreach ($hand as $tile => $ct) {
             for ($i = 0; $i < $ct; $i++) {
-                echo '<div class="tile player'.$player->getColor().'"><span>'.$tile."</span></div> ";
+                echo '<div class="tile player'.$player.'"><span>'.$tile."</span></div> ";
             }
         }
     }
