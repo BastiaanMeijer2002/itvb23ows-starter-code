@@ -95,7 +95,7 @@ class GameView
                     <?php if (GameState::getGameId() !== null) echo '<input type="hidden" name="game" value="'.GameState::getGameId().'" />'; ?>
                     <select name="piece">
                         <?php
-                        $hand = GameState::getPlayer() == 0 ? GameState::getPlayer1hand() : GameState::getPlayer2hand();
+                        $hand = GameState::getHand(GameState::getPlayer());
 
                         foreach ($hand as $tile => $ct) {
                             echo "<option value=\"$tile\">$tile</option>";

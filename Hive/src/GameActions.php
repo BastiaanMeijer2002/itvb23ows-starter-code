@@ -5,6 +5,9 @@ namespace HiveGame;
 use Exception;
 use HiveGame\GameRules;
 
+/**
+ * Manages the actions of the game
+ */
 class GameActions
 {
     private Database $db;
@@ -24,24 +27,21 @@ class GameActions
         $rules = new GameRules();
         $validity = $rules->validPlay($board, $to, $piece);
 
-        if ($validity) {
-            $board[$to] = [[GameState::getPlayer(), $piece]];
-
-
-            $hand = GameState::getHand(GameState::getPlayer());
-            $hand[$piece]--;
-            GameState::setHand(GameState::getPlayer(), $hand);
-
-            $this->swapPlayer();
-
-            GameState::setBoard($board);
-
-            $this->db->storeMove(GameState::getGameId(), "play", $piece, $to, GameState::getLastMove(), GameState::getState());
-            GameState::setLastMove($this->db->getDb()->insert_id);
-
+        if (!$validity) {
+            return false;
         }
 
-        return $validity;
+        $board[$to] = [[GameState::getPlayer(), $piece]];
+
+        $this->updateHand($piece);
+        $this->swapPlayer();
+
+        GameState::setBoard($board);
+
+        $this->db->storeMove(GameState::getGameId(), "play", $piece, $to, GameState::getLastMove(), GameState::getState());
+        GameState::setLastMove($this->db->getDb()->insert_id);
+
+        return true;
     }
 
     public function makeMove(string $from, string $to): string|bool
@@ -94,7 +94,6 @@ class GameActions
 
     }
 
-
     private function swapPlayer(): void
     {
         if (GameState::getPlayer() == 0) {
@@ -102,5 +101,13 @@ class GameActions
         } else {
             GameState::setPlayer(0);
         }
+    }
+
+    public static function updateHand($piece): void
+    {
+        $hand = GameState::getHand(GameState::getPlayer());
+        $hand[$piece]--;
+        if ($hand[$piece] < 1) {unset($hand[$piece]);}
+        GameState::setHand(GameState::getPlayer(), $hand);
     }
 }
