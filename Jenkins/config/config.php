@@ -8,7 +8,7 @@ $password = 'admin';
 
 $healthEndpoint = $sonarqubeUrl . '/api/v2/system/health';
 
-// Attempt to connect to the health endpoint
+// Script om to controleren als de Sonarqube-container volledig opgestart is.
 $connected = false;
 while (!$connected) {
     $healthRequest = curl_init($healthEndpoint);
@@ -28,7 +28,6 @@ while (!$connected) {
     curl_close($healthRequest);
 }
 
-// Keep retrying until Sonarqube status is GREEN
 $status = '';
 while ($status !== 'GREEN') {
     $healthRequest = curl_init($healthEndpoint);
