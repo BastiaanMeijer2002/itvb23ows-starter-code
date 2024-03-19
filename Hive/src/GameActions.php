@@ -30,7 +30,7 @@ class GameActions
 
             $hand = GameState::getHand(GameState::getPlayer());
             $hand[$piece]--;
-            if ($hand[$piece] < 1) unset($hand[$piece]);
+            if ($hand[$piece] < 1) {unset($hand[$piece]);}
             GameState::setHand(GameState::getPlayer(), $hand);
 
             $this->swapPlayer();
