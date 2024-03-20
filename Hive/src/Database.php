@@ -8,13 +8,18 @@ use mysqli_result;
 class Database
 {
     private mysqli $db;
+    private array $env = [
+        "hostname" => "mysql",
+        "username" => "root",
+        "password" => "root",
+        "database" => "hive",
+        "AI_BASE_URL" => "http://ai:6000/"
+    ];
 
     public function __construct(mysqli $db = null)
     {
         if ($db == null) {
-            $env = include_once 'env.php';
-
-            $mysqli = new mysqli($env["hostname"], $env["username"], $env["password"], $env["database"]);
+            $mysqli = new mysqli($this->env["hostname"], $this->env["username"], $this->env["password"], $this->env["database"]);
 
             if ($mysqli->connect_error) {
                 die("Connection failed: " . $mysqli->connect_error);
