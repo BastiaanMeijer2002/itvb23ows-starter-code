@@ -137,29 +137,39 @@ class GameView
         foreach (GameState::getBoard() as $pos => $tile) {
             $pq = explode(',', $pos);
             if (isset($pq[0]) && isset($pq[1])) {
-                if ($pq[0] < $min_p) $min_p = $pq[0];
-                if ($pq[1] < $min_q) $min_q = $pq[1];
+                $min_p = min($min_p, $pq[0]);
+                $min_q = min($min_q, $pq[1]);
             }
         }
 
         if (is_array(GameState::getBoard())) {
             foreach (array_filter(GameState::getBoard()) as $pos => $tile) {
                 $pq = explode(',', $pos);
-                $h = count($tile);
-                $html .= '<div class="tile player';
-                $html .= $tile[$h-1][0];
-                if ($h > 1) echo ' stacked';
-                $html .= '" style="left: ';
-                $html .= ($pq[0] - $min_p) * 4 + ($pq[1] - $min_q) * 2;
-                $html .= 'em; top: ';
-                $html .= ($pq[1] - $min_q) * 4;
-                $html .= "em;\">($pq[0],$pq[1])<span>";
-                $html .= $tile[$h-1][1];
-                $html .= '</span></div>';
+                $html .= self::renderTile($tile, $pq, $min_p, $min_q);
             }
         }
 
         echo $html;
+    }
+
+    private static function renderTile($tile, $pq, $min_p, $min_q): string
+    {
+        $html = '';
+        $h = count($tile);
+        $html .= '<div class="tile player';
+        $html .= $tile[$h-1][0];
+        if ($h > 1) {
+            $html .= ' stacked';
+        }
+        $html .= '" style="left: ';
+        $html .= ($pq[0] - $min_p) * 4 + ($pq[1] - $min_q) * 2;
+        $html .= 'em; top: ';
+        $html .= ($pq[1] - $min_q) * 4;
+        $html .= "em;\">($pq[0],$pq[1])<span>";
+        $html .= $tile[$h-1][1];
+        $html .= '</span></div>';
+
+        return $html;
     }
 
     private static function renderHand(array $hand, int $player): void
