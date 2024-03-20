@@ -19,7 +19,12 @@ class Database
     public function __construct(mysqli $db = null)
     {
         if ($db == null) {
-            $mysqli = new mysqli($this->env["hostname"], $this->env["username"], $this->env["password"], $this->env["database"]);
+            $mysqli = new mysqli(
+                $this->env["hostname"],
+                $this->env["username"],
+                $this->env["password"],
+                $this->env["database"]
+            );
 
             if ($mysqli->connect_error) {
                 die("Connection failed: " . $mysqli->connect_error);

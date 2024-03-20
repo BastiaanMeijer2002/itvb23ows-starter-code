@@ -88,23 +88,13 @@ class GameRules
     {
         $utils = new Utils();
         $tile = array_pop($board[$from]);
-
         if ($from === "0,0" && $to === "0,1" && $tile[1] === "Q" && GameState::getPlayer() == 0) {
             return false;
         }
-
-        if ($to === $from || (isset($board[$to]) && $tile[1] != "B")) {
+        if ($to === $from || (isset($board[$to]) && $tile[1] != "B") || ($tile[1] == "Q" || $tile[1] == "B" && !$utils->slide($board, $from, $to))) {
             $_SESSION['error'] = ($to === $from) ? 'Tile must move' : 'Tile not empty';
             return true;
         }
-
-        if ($tile[1] == "Q" || $tile[1] == "B") {
-            if (!$utils->slide($board, $from, $to)) {
-                $_SESSION['error'] = 'Tile must slide';
-                return true;
-            }
-        }
-
         return false;
     }
 
