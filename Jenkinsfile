@@ -24,8 +24,7 @@ pipeline {
             steps {
                 script { scannerHome = tool 'SonarScanner' }
                 withSonarQubeEnv('SonarScanner') {
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.project.settings=sonar-project.properties
-"
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.project.settings=sonar-project.properties"
                 }
             }
         }
