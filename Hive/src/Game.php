@@ -21,8 +21,6 @@ class Game
 
     public function startGame(): void
     {
-        new Utils();
-
         GameState::setGameId($this->db->createGame());
         GameState::setPlayer1hand(["Q" => 1, "B" => 2, "S" => 2, "A" => 3, "G" => 3]);
         GameState::setPlayer2hand(["Q" => 1, "B" => 2, "S" => 2, "A" => 3, "G" => 3]);
@@ -46,9 +44,10 @@ class Game
                 $gameActions->makeMove($move["from"], $move["to"]);
                 break;
             case "Undo":
-                //todo
+                echo "undo";
                 break;
             case "Pass":
+                echo "pass";
                 break;
         }
 
