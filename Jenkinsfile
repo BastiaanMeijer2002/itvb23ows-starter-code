@@ -24,7 +24,8 @@ pipeline {
             steps {
                 script { scannerHome = tool 'SonarScanner' }
                 withSonarQubeEnv('SonarScanner') {
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ows -Dsonar.sources=Hive/src -Dsonar.login=jenkins -Dsonar.password=jenkins"
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.project.settings=sonar-project.properties
+"
                 }
             }
         }
