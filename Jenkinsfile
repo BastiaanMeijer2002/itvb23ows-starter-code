@@ -16,8 +16,7 @@ pipeline {
         stage('PHPUnit') {
             steps {
                 script {
-                    sh "Hive/vendor/bin/phpunit --configuration Hive/phpunit.xml"
-                    recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'build/logs/cobertura.xml']])
+                    sh "Hive/vendor/bin/phpunit --configuration Hive/phpunit.xml --coverage-clover build/logs/clover.xml"
                 }
             }
         }

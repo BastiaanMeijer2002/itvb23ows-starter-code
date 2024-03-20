@@ -6,11 +6,13 @@
     </testsuites>
     <coverage>
         <include>
-            <directory suffix=".php">src</directory>
+            <directory>src</directory>
         </include>
+        <exclude>
+            <directory>tests</directory>
+        </exclude>
         <report>
-            <html outputDirectory="build/coverage" />
-            <cobertura outputFile="build/logs/cobertura.xml"/>
+            <clover>build/logs/clover.xml</clover>
         </report>
     </coverage>
 </phpunit>
