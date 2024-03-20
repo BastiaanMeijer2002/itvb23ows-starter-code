@@ -49,6 +49,9 @@ class Game
             case "Pass":
                 echo "pass";
                 break;
+            default:
+                $this->restartGame();
+
         }
 
         GameView::render();
