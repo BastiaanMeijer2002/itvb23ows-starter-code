@@ -16,7 +16,7 @@ pipeline {
         stage('PHPUnit') {
             steps {
                 script {
-                    sh "Hive/vendor/bin/phpunit --configuration phpunit.xml"
+                    sh "Hive/vendor/bin/phpunit --configuration Hive/phpunit.xml"
                     recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'build/logs/cobertura.xml']])
                 }
             }
