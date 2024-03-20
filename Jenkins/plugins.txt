@@ -22,4 +22,4 @@ workflow-aggregator:latest
 ws-cleanup:latest
 sonar:latest
 job-dsl:latest
-cobertura:latest
+coverage:latest
