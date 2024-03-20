@@ -91,7 +91,9 @@ class GameRules
         if ($from === "0,0" && $to === "0,1" && $tile[1] === "Q" && GameState::getPlayer() == 0) {
             return false;
         }
-        if ($to === $from || (isset($board[$to]) && $tile[1] != "B") || ($tile[1] == "Q" || $tile[1] == "B" && !$utils->slide($board, $from, $to))) {
+        if ($to === $from ||
+            (isset($board[$to]) && $tile[1] != "B") ||
+            ($tile[1] == "Q" || $tile[1] == "B" && !$utils->slide($board, $from, $to))) {
             $_SESSION['error'] = ($to === $from) ? 'Tile must move' : 'Tile not empty';
             return true;
         }
