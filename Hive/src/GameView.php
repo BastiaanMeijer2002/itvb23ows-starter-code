@@ -4,24 +4,7 @@ namespace HiveGame;
 
 class GameView
 {
-    private array $to = [];
-
-    public function __construct()
-    {
-
-        $to = [];
-        foreach ($GLOBALS['OFFSETS'] as $pq) {
-            foreach (array_keys(GameState::getBoard()) as $pos) {
-                $pq2 = explode(',', $pos);
-                $this->to[] = strval($pq[0]).','.strval($pq[1]);
-            }
-        }
-        $to = array_unique($this->to);
-        if (!count($to)) $this->to[] = '0,0';
-    }
-
-
-    public function render(): void
+    public static function render(): void
     {
         ?>
         <!DOCTYPE html>
@@ -79,13 +62,13 @@ class GameView
             <body>
                 <div class="board">
                     <?php
-                    $this->renderBoard();
+                    self::renderBoard();
                     ?>
                 </div>
                 <div class="hand">
                     <?php
-                    $this->renderHand(GameState::getPlayer1hand(), 0);
-                    $this->renderHand(GameState::getPlayer2hand(), 1);
+                    self::renderHand(GameState::getPlayer1hand(), 0);
+                    self::renderHand(GameState::getPlayer2hand(), 1);
                     ?>
                 </div>
                 <div class="turn">
@@ -104,7 +87,7 @@ class GameView
                     </select>
                     <select name="to">
                         <?php
-                        foreach ($this->to as $pos) {
+                        foreach (self::getPossibleMoves(GameState::getBoard()) as $pos) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
@@ -122,7 +105,7 @@ class GameView
                     </select>
                     <select name="to">
                         <?php
-                        foreach ($this->to as $pos) {
+                        foreach (self::getPossibleMoves(GameState::getBoard()) as $pos) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
@@ -145,7 +128,7 @@ class GameView
         <?php
     }
 
-    private function renderBoard(): void
+    private static function renderBoard(): void
     {
         $html = '';
 
@@ -179,13 +162,54 @@ class GameView
         echo $html;
     }
 
-    private function renderHand(array $hand, int $player): void
+    private static function renderHand(array $hand, int $player): void
     {
         foreach ($hand as $tile => $ct) {
             for ($i = 0; $i < $ct; $i++) {
                 echo '<div class="tile player'.$player.'"><span>'.$tile."</span></div> ";
             }
         }
+    }
+
+    public static function getPossibleMoves($board): array
+    {
+        $turn = count($board);
+
+        if (!$turn) {
+            return ['0,0'];
+        }
+
+        if ($turn == 1) {
+            return ['0,1', '1,0', '-1,0', '0,-1', '1,-1', '-1,1'];
+        }
+
+        $toList = [];
+        foreach ($board as $coordinate => $item) {
+            $xy = explode(',', $coordinate);
+            $x = intval($xy[0]);
+            $y = intval($xy[1]);
+
+            foreach ($GLOBALS['OFFSETS'] as $offset) {
+                $newX = $x + $offset[0];
+                $newY = $y + $offset[1];
+
+                $newCoordinate = "$newX,$newY";
+
+                $alreadyInBoard = false;
+                foreach ($board as $existingCoordinate => $existingItem) {
+                    if ($existingCoordinate === $newCoordinate) {
+                        $alreadyInBoard = true;
+                        break;
+                    }
+                }
+
+                if (!$alreadyInBoard) {
+                    $toList[] = $newCoordinate;
+                }
+            }
+        }
+
+        return array_unique($toList);
     }
 
 }

@@ -28,15 +28,12 @@ class Game
         GameState::setBoard([]);
         GameState::setPlayer(0);
 
-        $view = new GameView();
-        $view->render();
+        GameView::render();
     }
 
     public function continueGame($move): void
     {
         $utils = new Utils();
-
-        var_dump($move);
 
         $this->db->getGame($move["game"]);
         $gameActions = new GameActions($this->db);
@@ -50,8 +47,7 @@ class Game
                 break;
         }
 
-        $view = new GameView();
-        $view->render();
+        GameView::render();
     }
 
     public function restartGame(): void {
