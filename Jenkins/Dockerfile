@@ -1,5 +1,6 @@
 FROM jenkins/jenkins:latest
 ENV JAVA_OPTS "-Dcasc.jenkins.config=/var/jenkins_home/casc_configs -Djenkins.install.runSetupWizard=false"
+ENV XDEBUG_MODE=coverage
 COPY jenkins.yaml /var/jenkins_home/casc_configs/jenkins.yaml
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 USER root
