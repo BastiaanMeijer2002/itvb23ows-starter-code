@@ -6,7 +6,7 @@ class Utils
 {
     public function __construct()
     {
-        $GLOBALS['OFFSETS'] = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
+
     }
 
     public function isNeighbour($a, $b): bool
@@ -61,7 +61,7 @@ class Utils
         foreach ($GLOBALS['OFFSETS'] as $pq) {
             $p = $b[0] + $pq[0];
             $q = $b[1] + $pq[1];
-            if ($this->isNeighbour($from, $p.",".$q)) $common[] = $p.",".$q;
+            if ($this->isNeighbour($from, $p.",".$q)) {$common[] = $p.",".$q};
         }
         if (!$board[$common[0]] && !$board[$common[1]] && !$board[$from] && !$board[$to]) {return false;}
         return min($this->len($board[$common[0]]), $this->len($board[$common[1]])) <=

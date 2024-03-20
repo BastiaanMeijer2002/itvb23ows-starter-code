@@ -14,6 +14,7 @@ class Game
      */
     public function __construct(Database $db)
     {
+        $GLOBALS['OFFSETS'] = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
         $this->db = $db;
     }
 
@@ -33,7 +34,6 @@ class Game
 
     public function continueGame($move): void
     {
-        new Utils();
 
         $this->db->getGame($move["game"]);
         $gameActions = new GameActions($this->db);
@@ -44,6 +44,11 @@ class Game
                 break;
             case "Move":
                 $gameActions->makeMove($move["from"], $move["to"]);
+                break;
+            case "Undo":
+                //todo
+                break;
+            case "Pass":
                 break;
         }
 
