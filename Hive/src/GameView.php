@@ -89,7 +89,7 @@ class GameView
                     </select>
                     <select name="to">
                         <?php
-                        foreach (self::getPossibleMoves(GameState::getBoard()) as $pos) {
+                        foreach (self::getPossiblePlays(GameState::getBoard()) as $pos) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
@@ -109,7 +109,7 @@ class GameView
                     </select>
                     <select name="to">
                         <?php
-                        foreach (self::getPossibleMoves(GameState::getBoard()) as $pos) {
+                        foreach (self::getPossiblePlays(GameState::getBoard()) as $pos) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
@@ -184,8 +184,9 @@ class GameView
         }
     }
 
-    public static function getPossibleMoves($board): array
+    public static function getPossiblePlays($board): array
     {
+        $offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
         $turn = count($board);
 
         if (!$turn) {
@@ -202,7 +203,7 @@ class GameView
             $x = intval($xy[0]);
             $y = intval($xy[1]);
 
-            foreach ($GLOBALS['OFFSETS'] as $offset) {
+            foreach ($offsets as $offset) {
                 $newX = $x + $offset[0];
                 $newY = $y + $offset[1];
 
