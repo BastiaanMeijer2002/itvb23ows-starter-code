@@ -20,7 +20,7 @@ class Game
 
     public function startGame(): void
     {
-        $utils = new Utils();
+        new Utils();
 
         GameState::setGameId($this->db->createGame());
         GameState::setPlayer1hand(["Q" => 1, "B" => 2, "S" => 2, "A" => 3, "G" => 3]);
@@ -33,7 +33,7 @@ class Game
 
     public function continueGame($move): void
     {
-        $utils = new Utils();
+        new Utils();
 
         $this->db->getGame($move["game"]);
         $gameActions = new GameActions($this->db);

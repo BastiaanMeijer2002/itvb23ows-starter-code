@@ -75,7 +75,9 @@ class GameView
                     Turn: <?php echo (GameState::getPlayer() == 0) ? "White" : "Black"; ?>
                 </div>
                 <form method="post" action="../index.php">
-                    <?php if (GameState::getGameId() !== null) echo '<input type="hidden" name="game" value="'.GameState::getGameId().'" />'; ?>
+                    <?php if (GameState::getGameId() !== null) {
+                        echo '<input type="hidden" name="game" value="'.GameState::getGameId().'" />';
+                    } ?>
                     <select name="piece">
                         <?php
                         $hand = GameState::getHand(GameState::getPlayer());
@@ -95,7 +97,9 @@ class GameView
                     <input type="submit" name="action" value="Play">
                 </form>
                 <form method="post" action="../index.php">
-                    <?php if (GameState::getGameId() !== null) echo '<input type="hidden" name="game" value="'.GameState::getGameId().'" />' ?>
+                    <?php if (GameState::getGameId() !== null) {
+                        echo '<input type="hidden" name="game" value="'.GameState::getGameId().'" />';
+                    } ?>
                     <select name="from">
                         <?php
                         foreach (array_keys(GameState::getBoard()) as $pos) {
@@ -119,7 +123,6 @@ class GameView
                     <input type="hidden" name="game" value="new" />
                     <input type="submit" value="Restart">
                 </form>
-<!--                <strong>--><?php //echo $this->error; ?><!--</strong>-->
                 <form method="post" action="undo.php">
                     <input type="submit" value="Undo">
                 </form>

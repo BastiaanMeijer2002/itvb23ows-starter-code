@@ -41,7 +41,8 @@ class Database
 
     public function storeMove(int $gameId, string $type, string $from, string $to, int $previous, string $state): bool
     {
-        $stmt = $this->getDb()->prepare('insert into moves (game_id, type, move_from, move_to, previous_id, state) values (?, ?, ?, ?, ?, ?)');
+        $stmt = $this->getDb()->prepare('insert into moves (game_id, type, move_from, move_to, previous_id, state) ' .
+            'values (?, ?, ?, ?, ?, ?)');
         $stmt->bind_param('isssis', $gameId, $type, $from, $to, $previous, $state);
         return $stmt->execute();
     }

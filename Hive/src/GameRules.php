@@ -10,22 +10,26 @@ class GameRules
     public function validPlay(array $board, string $to, string $piece): bool|string
     {
         $utils = new Utils();
-
         $hand = GameState::getPlayer() == 0 ? GameState::getPlayer1hand() : GameState::getPlayer2hand();
 
+        $errorMessage = '';
 
-        if (!$hand[$piece]) return "Player does not have tile";
+        if (!$hand[$piece]) {
+            $errorMessage = "Player does not have tile";
+        } elseif (isset($board[$to])) {
+            $errorMessage = 'Board position is not empty';
+        } elseif (count($board) && !$utils->hasNeighBour($to, $board)) {
+            $errorMessage = "board position has no neighbour";
+        } elseif (array_sum($hand) < 11 &&
+            !$utils->neighboursAreSameColor(GameState::getPlayer(), $to, $board)) {
+            $errorMessage = "Board position has opposing neighbour";
+        } elseif (array_sum($hand) <= 8 && $hand['Q']) {
+            $errorMessage = 'Must play queen bee';
+        }
 
-        elseif (isset($board[$to])) return 'Board position is not empty';
-
-        elseif (count($board) && !$utils->hasNeighBour($to, $board)) return "board position has no neighbour";
-
-        elseif (array_sum($hand) < 11 && !$utils->neighboursAreSameColor(GameState::getPlayer(), $to, $board)) return "Board position has opposing neighbour";
-
-        elseif (array_sum($hand) <= 8 && $hand['Q']) return 'Must play queen bee';
-
-        return true;
+        return $errorMessage ?: true;
     }
+
 
     public function validMove(array $board, string $to, string $from): bool|string
     {
@@ -33,24 +37,9 @@ class GameRules
             return 'Board position is empty';
         }
 
-        if (!$this->isTileOwnedByPlayer($board, $from)) {
-            return "Tile is not owned by player";
-        }
-
-        if ($this->isQueenBeeNotPlayed()) {
-            return "Queen bee is not played";
-        }
-
-        if (!$this->hasNeighboringTiles($to, $board)) {
-            return "Move would split hive";
-        }
-
-        if ($this->isHiveSplit($board)) {
-            return "Move would split hive";
-        }
-
-        if ($this->isInvalidMove($board, $to, $from)) {
-            return $_SESSION['error'];
+        if (!$this->isTileOwnedByPlayer($board, $from) || $this->isQueenBeeNotPlayed()
+            || !$this->hasNeighboringTiles($to, $board) || $this->isHiveSplit($board)) {
+            return $this->isInvalidMove($board, $to, $from) ? $_SESSION['error'] : "Move would split hive";
         }
 
         return true;
@@ -97,37 +86,6 @@ class GameRules
             $_SESSION['error'] = ($to === $from) ? 'Tile must move' : 'Tile not empty';
             return true;
         }
-        return false;
-    }
-
-
-    public function validSoldierAntMove(array $board, string $from, string $to): bool
-    {
-        return false;
-    }
-
-    public function validGrasshopperMove(array $board, string $from, string $to): bool
-    {
-        return false;
-    }
-
-    public function validSpiderMove(array $board, string $from, string $to): bool
-    {
-        return false;
-    }
-
-    public function hasValidMove(array $board, Player $player): bool
-    {
-        return false;
-    }
-
-    public function checkWin(GameState $gameState): int
-    {
-        return GameState::getPlayer();
-    }
-
-    public function checkTie(GameState $gameState): bool
-    {
         return false;
     }
 }
