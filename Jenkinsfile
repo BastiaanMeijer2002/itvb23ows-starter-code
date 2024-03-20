@@ -16,7 +16,7 @@ pipeline {
         stage('PHPUnit') {
             steps {
                 script {
-                    sh "Hive/vendor/bin/phpunit Hive/tests"
+                    sh "Hive/vendor/bin/phpunit --configuration Hive/phpunit.xml --coverage-clover coverage.xml"
                 }
             }
         }
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script { scannerHome = tool 'SonarScanner' }
                 withSonarQubeEnv('SonarScanner') {
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ows -Dsonar.sources=Hive/src -Dsonar.login=jenkins -Dsonar.password=jenkins"
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.project.settings=sonar-project.properties"
                 }
             }
         }

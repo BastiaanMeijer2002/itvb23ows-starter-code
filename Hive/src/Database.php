@@ -8,13 +8,23 @@ use mysqli_result;
 class Database
 {
     private mysqli $db;
+    private array $env = [
+        "hostname" => "mysql",
+        "username" => "root",
+        "password" => "root",
+        "database" => "hive",
+        "AI_BASE_URL" => "http://ai:6000/"
+    ];
 
     public function __construct(mysqli $db = null)
     {
         if ($db == null) {
-            $env = include_once 'env.php';
-
-            $mysqli = new mysqli($env["hostname"], $env["username"], $env["password"], $env["database"]);
+            $mysqli = new mysqli(
+                $this->env["hostname"],
+                $this->env["username"],
+                $this->env["password"],
+                $this->env["database"]
+            );
 
             if ($mysqli->connect_error) {
                 die("Connection failed: " . $mysqli->connect_error);
@@ -31,7 +41,8 @@ class Database
 
     public function storeMove(int $gameId, string $type, string $from, string $to, int $previous, string $state): bool
     {
-        $stmt = $this->getDb()->prepare('insert into moves (game_id, type, move_from, move_to, previous_id, state) values (?, ?, ?, ?, ?, ?)');
+        $stmt = $this->getDb()->prepare('insert into moves (game_id, type, move_from, move_to, previous_id, state) ' .
+            'values (?, ?, ?, ?, ?, ?)');
         $stmt->bind_param('isssis', $gameId, $type, $from, $to, $previous, $state);
         return $stmt->execute();
     }

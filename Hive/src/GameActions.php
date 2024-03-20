@@ -38,7 +38,8 @@ class GameActions
 
         GameState::setBoard($board);
 
-        $this->db->storeMove(GameState::getGameId(), "play", $piece, $to, GameState::getLastMove(), GameState::getState());
+        $this->db->storeMove(GameState::getGameId(), "play", $piece, $to,
+            GameState::getLastMove(), GameState::getState());
         GameState::setLastMove($this->db->getDb()->insert_id);
 
         return true;
@@ -66,32 +67,14 @@ class GameActions
 
             $this->swapPlayer();
 
-            $this->db->storeMove(GameState::getGameId(), "move", $from, $to, GameState::getLastMove(), GameState::getState());
+            $this->db->storeMove(GameState::getGameId(), "move", $from, $to,
+                GameState::getLastMove(), GameState::getState());
             GameState::setLastMove($this->db->getDb()->insert_id);
         }
 
         GameState::setBoard($board);
 
         return $validity;
-    }
-
-
-    /**
-     * @throws Exception
-     */
-    public function undoMove(): void
-    {
-        if (GameState::getLastMove() == 0) {
-            throw new Exception("No previous move");
-        }
-
-        $lastMove = $this->db->getMoves(GameState::getLastMove());
-
-        if (isset($lastMove["state"])) {
-            GameState::setLastMove($lastMove["previous_id"]);
-            GameState::setState($lastMove["state"]);
-        }
-
     }
 
     private function swapPlayer(): void
