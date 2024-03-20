@@ -16,7 +16,7 @@ pipeline {
         stage('PHPUnit') {
             steps {
                 script {
-                    sh "Hive/vendor/bin/phpunit Hive/tests"
+                    sh "Hive/vendor/bin/phpunit Hive/tests --coverage-clover coverage.xml"
                 }
             }
         }
