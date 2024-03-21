@@ -3,13 +3,13 @@
 namespace HiveGame;
 
 use HiveGame\Player;
-use HiveGame\Utils;
+use HiveGame\GameUtils;
 
 class GameRules
 {
     public function validPlay(array $board, string $to, string $piece): bool|string
     {
-        $utils = new Utils();
+        $utils = new GameUtils();
         $hand = GameState::getPlayer() == 0 ? GameState::getPlayer1hand() : GameState::getPlayer2hand();
 
         $errorMessage = '';
@@ -63,19 +63,19 @@ class GameRules
 
     private function hasNeighboringTiles(string $position, array $board): bool
     {
-        $utils = new Utils();
+        $utils = new GameUtils();
         return $utils->hasNeighBour($position, $board);
     }
 
     private function isHiveSplit(array $board): bool
     {
-        $utils = new Utils();
+        $utils = new GameUtils();
         return $utils->isHiveSplit($board);
     }
 
     private function isInvalidMove(array $board, string $to, string $from): bool
     {
-        $utils = new Utils();
+        $utils = new GameUtils();
         $tile = array_pop($board[$from]);
         if ($from === "0,0" && $to === "0,1" && $tile[1] === "Q" && GameState::getPlayer() == 0) {
             return false;

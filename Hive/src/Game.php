@@ -3,7 +3,7 @@
 namespace HiveGame;
 
 use HiveGame\GameState;
-use HiveGame\Utils;
+use HiveGame\GameUtils;
 
 class Game
 {
@@ -35,6 +35,7 @@ class Game
 
         $this->db->getGame($move["game"]);
         $gameActions = new GameActions($this->db);
+        var_dump(GameState::getBoard());
 
         switch ($move["action"]) {
             case "Play":

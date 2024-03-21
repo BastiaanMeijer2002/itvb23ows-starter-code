@@ -1,10 +1,10 @@
 <?php
 
 
-use HiveGame\GameView;
+use HiveGame\GameUtils;
 use PHPUnit\Framework\TestCase;
 
-class GameViewTest extends TestCase
+class GameUtilsTest extends TestCase
 {
     public function testPossiblePlaysFirstRound() {
         $board = [];

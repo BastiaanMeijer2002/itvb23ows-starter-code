@@ -89,7 +89,7 @@ class GameView
                     </select>
                     <select name="to">
                         <?php
-                        foreach (self::getPossiblePlays(GameState::getBoard()) as $pos) {
+                        foreach (GameUtils::getPossiblePlays(GameState::getBoard()) as $pos) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
@@ -102,14 +102,14 @@ class GameView
                     } ?>
                     <select name="from">
                         <?php
-                        foreach (array_keys(GameState::getBoard()) as $pos) {
+                        foreach (GameUtils::getPlayerTiles(GameState::getBoard()) as $pos) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
                     </select>
                     <select name="to">
                         <?php
-                        foreach (self::getPossiblePlays(GameState::getBoard()) as $pos) {
+                        foreach (GameUtils::getPossiblePlays(GameState::getBoard()) as $pos) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
@@ -182,48 +182,6 @@ class GameView
                 echo '<div class="tile player'.$player.'"><span>'.$tile."</span></div> ";
             }
         }
-    }
-
-    public static function getPossiblePlays($board): array
-    {
-        $offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
-        $turn = count($board);
-
-        if (!$turn) {
-            return ['0,0'];
-        }
-
-        if ($turn == 1) {
-            return ['0,1', '1,0', '-1,0', '0,-1', '1,-1', '-1,1'];
-        }
-
-        $toList = [];
-        foreach ($board as $coordinate => $item) {
-            $xy = explode(',', $coordinate);
-            $x = intval($xy[0]);
-            $y = intval($xy[1]);
-
-            foreach ($offsets as $offset) {
-                $newX = $x + $offset[0];
-                $newY = $y + $offset[1];
-
-                $newCoordinate = "$newX,$newY";
-
-                $alreadyInBoard = false;
-                foreach ($board as $existingCoordinate => $existingItem) {
-                    if ($existingCoordinate === $newCoordinate) {
-                        $alreadyInBoard = true;
-                        break;
-                    }
-                }
-
-                if (!$alreadyInBoard) {
-                    $toList[] = $newCoordinate;
-                }
-            }
-        }
-
-        return array_unique($toList);
     }
 
 }

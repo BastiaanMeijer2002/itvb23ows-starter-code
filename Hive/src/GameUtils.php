@@ -2,7 +2,7 @@
 
 namespace HiveGame;
 
-class Utils
+class GameUtils
 {
     public function isNeighbour($a, $b): bool
     {
@@ -61,6 +61,60 @@ class Utils
         if (!$board[$common[0]] && !$board[$common[1]] && !$board[$from] && !$board[$to]) {return false;}
         return min($this->len($board[$common[0]]), $this->len($board[$common[1]])) <=
             max($this->len($board[$from]), $this->len($board[$to]));
+    }
+
+    public static function getPossiblePlays($board): array
+    {
+        $offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
+        $turn = count($board);
+
+        if (!$turn) {
+            return ['0,0'];
+        }
+
+        if ($turn == 1) {
+            return ['0,1', '1,0', '-1,0', '0,-1', '1,-1', '-1,1'];
+        }
+
+        $toList = [];
+        foreach ($board as $coordinate => $item) {
+            $xy = explode(',', $coordinate);
+            $x = intval($xy[0]);
+            $y = intval($xy[1]);
+
+            foreach ($offsets as $offset) {
+                $newX = $x + $offset[0];
+                $newY = $y + $offset[1];
+
+                $newCoordinate = "$newX,$newY";
+
+                $alreadyInBoard = false;
+                foreach ($board as $existingCoordinate => $existingItem) {
+                    if ($existingCoordinate === $newCoordinate) {
+                        $alreadyInBoard = true;
+                        break;
+                    }
+                }
+
+                if (!$alreadyInBoard) {
+                    $toList[] = $newCoordinate;
+                }
+            }
+        }
+
+        return array_unique($toList);
+    }
+
+    public static function getPlayerTiles($board): array
+    {
+        $tiles = [];
+        foreach ($board as $tile => $data) {
+            if ($data[0][0] == GameState::getPlayer()) {
+                $tiles[] = $tile;
+            }
+        }
+
+        return $tiles;
     }
 
 }
