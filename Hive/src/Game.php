@@ -8,14 +8,15 @@ use HiveGame\GameUtils;
 class Game
 {
     private Database $db;
+    private GameActions $gameActions;
 
     /**
      * @param Database $db
      */
-    public function __construct(Database $db)
+    public function __construct(Database $db, GameActions $gameActions)
     {
-        $GLOBALS['OFFSETS'] = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
         $this->db = $db;
+        $this->gameActions = $gameActions;
     }
 
 
@@ -30,19 +31,19 @@ class Game
         GameView::render();
     }
 
-    public function continueGame($move): void
+    public function continueGame($move): bool
     {
+        if (!count($move)) {return false;}
 
         $this->db->getGame($move["game"]);
-        $gameActions = new GameActions($this->db);
         var_dump(GameState::getBoard());
 
         switch ($move["action"]) {
             case "Play":
-                $gameActions->makePlay($move["piece"], $move["to"]);
+                $this->gameActions->makePlay($move["piece"], $move["to"]);
                 break;
             case "Move":
-                $gameActions->makeMove($move["from"], $move["to"]);
+                $this->gameActions->makeMove($move["from"], $move["to"]);
                 break;
             case "Undo":
                 echo "undo";
@@ -52,10 +53,12 @@ class Game
                 break;
             default:
                 $this->restartGame();
+                return false;
 
         }
 
         GameView::render();
+        return true;
     }
 
     public function restartGame(): void {

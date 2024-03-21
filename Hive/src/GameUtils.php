@@ -50,10 +50,11 @@ class GameUtils
 
     public function slide($board, $from, $to): bool
     {
+        $offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
         if (!$this->hasNeighBour($to, $board) || !$this->isNeighbour($from, $to)) {return false;}
         $b = explode(',', $to);
         $common = [];
-        foreach ($GLOBALS['OFFSETS'] as $pq) {
+        foreach ($offsets as $pq) {
             $p = $b[0] + $pq[0];
             $q = $b[1] + $pq[1];
             if ($this->isNeighbour($from, $p.",".$q)) {$common[] = $p.",".$q;}
