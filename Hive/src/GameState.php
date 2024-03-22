@@ -130,6 +130,31 @@ class GameState
     /**
      * @return string
      */
+    public static function getError(): string
+    {
+        return $_SESSION["error"] ?? '';
+    }
+
+    /**
+     * @param $error
+     * @return void
+     */
+    public static function setError($error): void
+    {
+        $_SESSION["error"] = $error;
+    }
+
+    /**
+     * @return void
+     */
+    public static function clearError(): void
+    {
+        self::setError("");
+    }
+
+    /**
+     * @return string
+     */
     public static function getState(): string
     {
         return serialize([

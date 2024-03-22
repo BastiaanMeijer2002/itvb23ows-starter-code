@@ -4,7 +4,7 @@ namespace HiveGame;
 
 class GameUtils
 {
-    public function isNeighbour($a, $b): bool
+    public static function isNeighbour($a, $b): bool
     {
         $a = explode(',', $a);
         $b = explode(',', $b);
@@ -15,7 +15,7 @@ class GameUtils
 
         if (($a[0] == $b[0] && abs($a[1] - $b[1]) == 1) ||
             ($a[1] == $b[1] && abs($a[0] - $b[0]) == 1) ||
-            ($a[0] + $a[1] == $b[0] + $b[1])) {
+            ($a[0] . $a[1] == $b[0] . $b[1])) {
             return true;
         }
 
@@ -23,13 +23,22 @@ class GameUtils
     }
 
 
-    public function hasNeighBour($a, $board): bool
+    public static function hasNeighbour($coordinate, $board): bool
     {
-        foreach (array_keys($board) as $b) {
-            if ($this->isNeighbour($a, $b)) {
+        $offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
+
+        [$x, $y] = explode(',', $coordinate);
+
+        foreach ($offsets as [$dx, $dy]) {
+            $neighbourX = $x + $dx;
+            $neighbourY = $y + $dy;
+            $neighbourCoordinate = "$neighbourX,$neighbourY";
+
+            if (isset($board[$neighbourCoordinate])) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -111,7 +120,7 @@ class GameUtils
         $tiles = [];
         foreach ($board as $tile => $data) {
             if ($data[0][0] == GameState::getPlayer()) {
-                $tiles[] = $tile;
+                $tiles[$tile] = $data;
             }
         }
 

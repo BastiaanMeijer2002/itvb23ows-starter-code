@@ -102,7 +102,7 @@ class GameView
                     } ?>
                     <select name="from">
                         <?php
-                        foreach (GameUtils::getPlayerTiles(GameState::getBoard()) as $pos) {
+                        foreach (GameUtils::getPlayerTiles(GameState::getBoard()) as $pos => $data) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
@@ -126,6 +126,7 @@ class GameView
                 <form method="post" action="undo.php">
                     <input type="submit" value="Undo">
                 </form>
+                <strong><?php echo GameState::getError(); ?></strong>
             </body>
         </html>
         <?php
@@ -157,10 +158,13 @@ class GameView
 
     private static function renderTile($tile, $pq, $min_p, $min_q): string
     {
+        var_dump($tile);
         $html = '';
         $h = count($tile);
         $html .= '<div class="tile player';
-        $html .= $tile[$h-1][0];
+        if (is_array($tile) && count($tile) > 0) {
+            $html .= $tile[0][0];
+        }
         if ($h > 1) {
             $html .= ' stacked';
         }
@@ -169,7 +173,9 @@ class GameView
         $html .= 'em; top: ';
         $html .= ($pq[1] - $min_q) * 4;
         $html .= "em;\">($pq[0],$pq[1])<span>";
-        $html .= $tile[$h-1][1];
+        if (is_array($tile) && count($tile) > 0) {
+            $html .= $tile[0][1];
+        }
         $html .= '</span></div>';
 
         return $html;
