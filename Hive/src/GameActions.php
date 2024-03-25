@@ -24,8 +24,7 @@ class GameActions
     {
         $board = GameState::getBoard();
 
-        $rules = new GameRules();
-        $validity = $rules->validPlay($board, $to, $piece);
+        $validity = GameRules::validPlay($board, $to, $piece);
 
         if (!$validity) {
             return false;
@@ -51,11 +50,9 @@ class GameActions
     {
         $board = GameState::getBoard();
 
-        $rules = new GameRules();
-        $validity = $rules->validMove(GameState::getBoard(), $to, $from);
+        $validity = GameRules::validMove(GameState::getBoard(), $to, $from);
 
         if (!$validity) {
-            echo "validityce";
             return $validity;
         }
 

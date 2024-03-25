@@ -6,7 +6,7 @@ use HiveGame\GameUtils;
 
 class GameRules
 {
-    public function validPlay(array $board, string $to, string $piece): bool|string
+    public static function validPlay(array $board, string $to, string $piece): bool|string
     {
         $utils = new GameUtils();
         $hand = GameState::getHand(GameState::getPlayer());
@@ -39,12 +39,12 @@ class GameRules
         return $validity;
     }
 
-    public function validMove(array $board, string $to, string $from): bool|string
+    public static function validMove(array $board, string $to, string $from): bool|string
     {
         $validity = true;
         echo $to;
 
-        if ($this->wouldSplitHive($board, $from)) {$validity = false;}
+        if (self::wouldSplitHive($board, $from)) {$validity = false;}
         $playerTiles = GameUtils::getPlayerTiles($board);
         if (!isset($playerTiles[$from])) {$validity = false;}
         return $validity;
