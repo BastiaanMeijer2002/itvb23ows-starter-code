@@ -158,11 +158,10 @@ class GameView
 
     private static function renderTile($tile, $pq, $min_p, $min_q): string
     {
-        var_dump($tile);
         $html = '';
         $h = count($tile);
         $html .= '<div class="tile player';
-        if (is_array($tile) && count($tile) > 0) {
+        if (is_array($tile) && !empty($tile)) {
             $html .= $tile[0][0];
         }
         if ($h > 1) {
@@ -173,7 +172,7 @@ class GameView
         $html .= 'em; top: ';
         $html .= ($pq[1] - $min_q) * 4;
         $html .= "em;\">($pq[0],$pq[1])<span>";
-        if (is_array($tile) && count($tile) > 0) {
+        if (is_array($tile) && !empty($tile)) {
             $html .= $tile[0][1];
         }
         $html .= '</span></div>';

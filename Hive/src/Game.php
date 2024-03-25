@@ -36,7 +36,6 @@ class Game
         if (!count($move)) {return false;}
 
         $this->db->getGame($move["game"]);
-        var_dump(GameState::getBoard());
 
         switch ($move["action"]) {
             case "Play":

@@ -56,7 +56,6 @@ class GameActions
 
         if (!$validity) {
             echo "validityce";
-            var_dump($validity);
             return $validity;
         }
 

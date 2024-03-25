@@ -43,14 +43,9 @@ class GameRules
     {
         $validity = true;
 
-//        if ($this->wouldSplitHive($board, $from)) {$validity = false;}
-        echo 'split';
-        var_dump($validity);
+        if ($this->wouldSplitHive($board, $from)) {$validity = false;}
         $playerTiles = GameUtils::getPlayerTiles($board);
-        var_dump($playerTiles);
-        if (!isset($playerTiles[$from])) {$validity = false;};
-        echo 'pt';
-        var_dump($validity);
+        if (!isset($playerTiles[$from])) {$validity = false;}
         return $validity;
     }
 
