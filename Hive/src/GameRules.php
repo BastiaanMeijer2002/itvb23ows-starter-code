@@ -42,6 +42,7 @@ class GameRules
     public function validMove(array $board, string $to, string $from): bool|string
     {
         $validity = true;
+        echo $to;
 
         if ($this->wouldSplitHive($board, $from)) {$validity = false;}
         $playerTiles = GameUtils::getPlayerTiles($board);
