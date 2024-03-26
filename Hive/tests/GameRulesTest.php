@@ -32,5 +32,23 @@ class GameRulesTest extends TestCase
         $result = GameRules::validMove($board, $to, $from);
 
         $this->assertTrue($result);
+
+    }
+
+    public function testQueenBeePlayed() {
+        $board = [
+            "0,0" => [0, "B"],
+            "0,1" => [1, "B"],
+            "0,2" => [1, "B"],
+            "1,0" => [0, "A"],
+            "0,-1" => [0, "A"],
+            "-1, 1" => [1, "Q"]
+        ];
+        $piece = "S";
+        $to = "0,-2";
+
+        $result = GameRules::validPlay($board, $to, $piece);
+
+        $this->assertFalse($result);
     }
 }
