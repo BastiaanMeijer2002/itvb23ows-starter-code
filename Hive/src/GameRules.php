@@ -65,6 +65,8 @@ class GameRules
             case "S":
                 echo "S";
                 break;
+            default:
+                $validity = true;
         }
         return $validity;
     }
