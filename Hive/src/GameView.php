@@ -89,7 +89,7 @@ class GameView
                     </select>
                     <select name="to">
                         <?php
-                        foreach (self::getPossiblePlays(GameState::getBoard()) as $pos) {
+                        foreach (GameUtils::getPossiblePlays(GameState::getBoard()) as $pos) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
@@ -102,14 +102,14 @@ class GameView
                     } ?>
                     <select name="from">
                         <?php
-                        foreach (array_keys(GameState::getBoard()) as $pos) {
+                        foreach (GameUtils::getPlayerTiles(GameState::getBoard()) as $pos => $data) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
                     </select>
                     <select name="to">
                         <?php
-                        foreach (self::getPossiblePlays(GameState::getBoard()) as $pos) {
+                        foreach (GameUtils::getPossiblePlays(GameState::getBoard()) as $pos) {
                             echo "<option value=\"$pos\">$pos</option>";
                         }
                         ?>
@@ -126,6 +126,7 @@ class GameView
                 <form method="post" action="undo.php">
                     <input type="submit" value="Undo">
                 </form>
+                <strong><?php echo GameState::getError(); ?></strong>
             </body>
         </html>
         <?php
@@ -160,7 +161,9 @@ class GameView
         $html = '';
         $h = count($tile);
         $html .= '<div class="tile player';
-        $html .= $tile[$h-1][0];
+        if (is_array($tile) && !empty($tile)) {
+            $html .= $tile[0][0];
+        }
         if ($h > 1) {
             $html .= ' stacked';
         }
@@ -169,7 +172,9 @@ class GameView
         $html .= 'em; top: ';
         $html .= ($pq[1] - $min_q) * 4;
         $html .= "em;\">($pq[0],$pq[1])<span>";
-        $html .= $tile[$h-1][1];
+        if (is_array($tile) && !empty($tile)) {
+            $html .= $tile[0][1];
+        }
         $html .= '</span></div>';
 
         return $html;
@@ -182,48 +187,6 @@ class GameView
                 echo '<div class="tile player'.$player.'"><span>'.$tile."</span></div> ";
             }
         }
-    }
-
-    public static function getPossiblePlays($board): array
-    {
-        $offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
-        $turn = count($board);
-
-        if (!$turn) {
-            return ['0,0'];
-        }
-
-        if ($turn == 1) {
-            return ['0,1', '1,0', '-1,0', '0,-1', '1,-1', '-1,1'];
-        }
-
-        $toList = [];
-        foreach ($board as $coordinate => $item) {
-            $xy = explode(',', $coordinate);
-            $x = intval($xy[0]);
-            $y = intval($xy[1]);
-
-            foreach ($offsets as $offset) {
-                $newX = $x + $offset[0];
-                $newY = $y + $offset[1];
-
-                $newCoordinate = "$newX,$newY";
-
-                $alreadyInBoard = false;
-                foreach ($board as $existingCoordinate => $existingItem) {
-                    if ($existingCoordinate === $newCoordinate) {
-                        $alreadyInBoard = true;
-                        break;
-                    }
-                }
-
-                if (!$alreadyInBoard) {
-                    $toList[] = $newCoordinate;
-                }
-            }
-        }
-
-        return array_unique($toList);
     }
 
 }

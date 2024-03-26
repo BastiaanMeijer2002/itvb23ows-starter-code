@@ -1,6 +1,5 @@
 <?php
 
-
 use HiveGame\GameState;
 use PHPUnit\Framework\TestCase;
 

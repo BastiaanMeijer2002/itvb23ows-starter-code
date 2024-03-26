@@ -24,12 +24,13 @@ class GameActions
     {
         $board = GameState::getBoard();
 
-        $rules = new GameRules();
-        $validity = $rules->validPlay($board, $to, $piece);
+        $validity = GameRules::validPlay($board, $to, $piece);
 
         if (!$validity) {
             return false;
         }
+
+        GameState::clearError();
 
         $board[$to] = [[GameState::getPlayer(), $piece]];
 
@@ -49,30 +50,26 @@ class GameActions
     {
         $board = GameState::getBoard();
 
-        $rules = new GameRules();
-        $validity = $rules->validMove(GameState::getBoard(), $to, $from);
+        $validity = GameRules::validMove(GameState::getBoard(), $to, $from);
 
         if (!$validity) {
             return $validity;
         }
 
-        if (!empty($board[$from])) {
-            $tile = array_pop($board[$from]);
+        GameState::clearError();
 
-            if (isset($board[$to])) {
-                array_push($board[$to], $tile);
-            } else {
-                $board[$to] = [$tile];
-            }
+        $tile = array_pop($board[$from]);
 
-            $this->swapPlayer();
+        $board[$to] = [$tile];
 
-            $this->db->storeMove(GameState::getGameId(), "move", $from, $to,
-                GameState::getLastMove(), GameState::getState());
-            GameState::setLastMove($this->db->getDb()->insert_id);
-        }
+        $this->swapPlayer();
 
         GameState::setBoard($board);
+
+        $this->db->storeMove(GameState::getGameId(), "move", $from, $to,
+            GameState::getLastMove(), GameState::getState());
+        GameState::setLastMove($this->db->getDb()->insert_id);
+
 
         return $validity;
     }

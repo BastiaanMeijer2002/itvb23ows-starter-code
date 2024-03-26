@@ -2,90 +2,65 @@
 
 namespace HiveGame;
 
-use HiveGame\Player;
-use HiveGame\Utils;
+use HiveGame\GameUtils;
 
 class GameRules
 {
-    public function validPlay(array $board, string $to, string $piece): bool|string
+    public static function validPlay(array $board, string $to, string $piece): bool|string
     {
-        $utils = new Utils();
-        $hand = GameState::getPlayer() == 0 ? GameState::getPlayer1hand() : GameState::getPlayer2hand();
+        $utils = new GameUtils();
+        $hand = GameState::getHand(GameState::getPlayer());
 
-        $errorMessage = '';
+        $validity = true;
 
         if (!$hand[$piece]) {
             $errorMessage = "Player does not have tile";
+            GameState::setError($errorMessage);
+            $validity = false;
         } elseif (isset($board[$to])) {
             $errorMessage = 'Board position is not empty';
+            GameState::setError($errorMessage);
+            $validity = false;
         } elseif (count($board) && !$utils->hasNeighBour($to, $board)) {
             $errorMessage = "board position has no neighbour";
+            GameState::setError($errorMessage);
+            $validity = false;
         } elseif (array_sum($hand) < 11 &&
             !$utils->neighboursAreSameColor(GameState::getPlayer(), $to, $board)) {
             $errorMessage = "Board position has opposing neighbour";
-        } elseif (array_sum($hand) <= 8 && $hand['Q']) {
+            GameState::setError($errorMessage);
+            $validity = false;
+        } elseif (array_sum($hand) <= 8 && isset($hand['Q'])) {
             $errorMessage = 'Must play queen bee';
+            GameState::setError($errorMessage);
+            $validity = false;
         }
 
-        return $errorMessage ?: true;
+        return $validity;
     }
 
-
-    public function validMove(array $board, string $to, string $from): bool|string
+    public static function validMove(array $board, string $to, string $from): bool|string
     {
-        if (!$this->isBoardPositionOccupied($board, $from)) {
-            return 'Board position is empty';
-        }
+        $validity = true;
+        echo $to;
 
-        if (!$this->isTileOwnedByPlayer($board, $from) || $this->isQueenBeeNotPlayed()
-            || !$this->hasNeighboringTiles($to, $board) || $this->isHiveSplit($board)) {
-            return $this->isInvalidMove($board, $to, $from) ? $_SESSION['error'] : "Move would split hive";
-        }
-
-        return true;
+        if (self::wouldSplitHive($board, $from)) {$validity = false;}
+        $playerTiles = GameUtils::getPlayerTiles($board);
+        if (!isset($playerTiles[$from])) {$validity = false;}
+        return $validity;
     }
 
-    private function isBoardPositionOccupied(array $board, string $position): bool
+    public static function wouldSplitHive($board, $from): bool
     {
-        return isset($board[$position]);
-    }
-
-    private function isTileOwnedByPlayer(array $board, string $position): bool
-    {
-        return $board[$position][count($board[$position])-1][0] === GameState::getPlayer();
-    }
-
-    private function isQueenBeeNotPlayed(): bool
-    {
-        $hand = GameState::getPlayer() == 0 ? GameState::getPlayer1hand() : GameState::getPlayer2hand();
-        return $hand['Q'];
-    }
-
-    private function hasNeighboringTiles(string $position, array $board): bool
-    {
-        $utils = new Utils();
-        return $utils->hasNeighBour($position, $board);
-    }
-
-    private function isHiveSplit(array $board): bool
-    {
-        $utils = new Utils();
-        return $utils->isHiveSplit($board);
-    }
-
-    private function isInvalidMove(array $board, string $to, string $from): bool
-    {
-        $utils = new Utils();
-        $tile = array_pop($board[$from]);
-        if ($from === "0,0" && $to === "0,1" && $tile[1] === "Q" && GameState::getPlayer() == 0) {
-            return false;
-        }
-        if ($to === $from ||
-            (isset($board[$to]) && $tile[1] != "B") ||
-            ($tile[1] == "Q" || $tile[1] == "B" && !$utils->slide($board, $from, $to))) {
-            $_SESSION['error'] = ($to === $from) ? 'Tile must move' : 'Tile not empty';
-            return true;
+        $boardCopy = $board;
+        unset($boardCopy[$from]);
+        foreach ($boardCopy as $tile => $item) {
+            if (!GameUtils::hasNeighbour($tile, $boardCopy)) {
+                GameState::setError("Hive would split");
+                return true;
+            }
         }
         return false;
     }
+
 }

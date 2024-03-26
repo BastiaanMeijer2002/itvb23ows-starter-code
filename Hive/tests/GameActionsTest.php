@@ -19,3 +19,4 @@ class GameActionsTest extends TestCase
         $this->assertArrayNotHasKey($testPiece, GameState::getHand(GameState::getPlayer()));
     }
 }
+
