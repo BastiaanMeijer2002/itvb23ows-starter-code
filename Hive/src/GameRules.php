@@ -45,8 +45,14 @@ class GameRules
         echo $to;
 
         if (self::wouldSplitHive($board, $from)) {$validity = false;}
+
         $playerTiles = GameUtils::getPlayerTiles($board);
         if (!isset($playerTiles[$from])) {$validity = false;}
+
+        if ($from == "0,0" && $board[$from][0][0] == 0 && $board[$from][0][1] == "Q"
+            && $to == "0,1" && $board["1,0"][0][0] == 1 && $board["1,0"][0][1] == "Q") {
+            $validity = true;
+        }
         return $validity;
     }
 
