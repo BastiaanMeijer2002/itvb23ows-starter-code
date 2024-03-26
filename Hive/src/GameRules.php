@@ -3,6 +3,7 @@
 namespace HiveGame;
 
 use HiveGame\GameUtils;
+use HiveGame\insects\Grasshopper;
 
 class GameRules
 {
@@ -52,6 +53,18 @@ class GameRules
         if ($from == "0,0" && $board[$from][0][0] == 0 && $board[$from][0][1] == "Q"
             && $to == "0,1" && $board["1,0"][0][0] == 1 && $board["1,0"][0][1] == "Q") {
             $validity = true;
+        }
+
+        switch ($from[0][1]) {
+            case "G":
+                $validity = Grasshopper::validMove($board, $from, $to);
+                break;
+            case "A":
+                echo "A";
+                break;
+            case "S":
+                echo "S";
+                break;
         }
         return $validity;
     }

@@ -3,5 +3,5 @@
 namespace HiveGame\insects;
 
 interface Insect {
-    public static function validMove($from, $to): bool;
+    public static function validMove($board, $from, $to): bool;
 }
