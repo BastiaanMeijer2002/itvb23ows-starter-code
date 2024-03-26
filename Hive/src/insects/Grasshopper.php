@@ -16,16 +16,14 @@ class Grasshopper implements Insect
         $toX = $toCoords[0];
         $toY = $toCoords[1];
 
-        if ($from != $to) {
-            if ($fromX == $toX || $fromY == $toY) {
-                if (abs($toX - $fromX) > 1 || abs($toY - $fromY) > 1) {
-                    $validity = self::checkPositionsOccupied($board, $fromX, $fromY, $toY);
-                }
-            }
+        if ($from != $to && ($fromX == $toX || $fromY == $toY) && (abs($toX - $fromX) > 1
+                || abs($toY - $fromY) > 1)) {
+            $validity = self::checkPositionsOccupied($board, $fromX, $fromY, $toY);
         }
 
         return $validity;
     }
+
 
     private static function checkPositionsOccupied($board, $fromX, $fromY, $toY): bool
     {
