@@ -23,4 +23,14 @@ class GameRulesTest extends TestCase
 
         $this->assertFalse($result);
     }
+
+    public function testValidMoveWhiteQueen() {
+        $board = ["0,0" => [[0, "Q"]], "1,0" => [[1, "Q"]]];
+        $from = "0,0";
+        $to = "0,1";
+
+        $result = GameRules::validMove($board, $to, $from);
+
+        $this->assertTrue($result);
+    }
 }
