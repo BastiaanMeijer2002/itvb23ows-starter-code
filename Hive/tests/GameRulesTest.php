@@ -2,6 +2,7 @@
 
 
 use HiveGame\GameRules;
+use HiveGame\GameState;
 use PHPUnit\Framework\TestCase;
 
 class GameRulesTest extends TestCase
@@ -48,6 +49,38 @@ class GameRulesTest extends TestCase
         $to = "0,-2";
 
         $result = GameRules::validPlay($board, $to, $piece);
+
+        $this->assertFalse($result);
+    }
+
+    public function testPlayerDoesNotHavePiece() {
+        GameState::setPlayer(0);
+        GameState::setPlayer1hand([]);
+        $piece = "Q";
+
+        $result = GameRules::validPlay([], "", $piece);
+
+        $this->assertFalse($result);
+    }
+
+    public function testPositionIsNotEmpty() {
+        $board = [
+            "0,0" => []
+        ];
+        $to = "0,0";
+
+        $result = GameRules::validPlay($board, $to, "");
+
+        $this->assertFalse($result);
+    }
+
+    public function testHasNoNeighbour() {
+        $board = [
+            "0,0" => []
+        ];
+        $to = "3,3";
+
+        $result = GameRules::validPlay($board, $to, "");
 
         $this->assertFalse($result);
     }
