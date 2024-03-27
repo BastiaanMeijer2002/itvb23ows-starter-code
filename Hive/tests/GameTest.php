@@ -100,4 +100,27 @@ class GameTest extends TestCase
 
         $this->assertFalse($play);
     }
+
+    public function testContinueGamePassValid() {
+        $move = [
+            "action" => "Pass",
+            "game" => 1
+        ];
+        GameState::setPlayer(0);
+
+        $play = $this->game->continueGame($move);
+
+        $this->assertTrue($play);
+        $this->assertEquals(1, GameState::getPlayer());
+    }
+
+    public function testContinueGamePassInvalid() {
+        $move = [];
+        GameState::setPlayer(0);
+
+        $play = $this->game->continueGame($move);
+
+        $this->assertFalse($play);
+        $this->assertEquals(0, GameState::getPlayer());
+    }
 }

@@ -47,6 +47,7 @@ class GameRulesTest extends TestCase
         ];
         $piece = "S";
         $to = "0,-2";
+        GameState::setPlayer(0);
 
         $result = GameRules::validPlay($board, $to, $piece);
 

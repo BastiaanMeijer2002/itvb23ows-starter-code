@@ -12,6 +12,7 @@ class Game
 
     /**
      * @param Database $db
+     * @param GameActions $gameActions
      */
     public function __construct(Database $db, GameActions $gameActions)
     {
@@ -48,7 +49,7 @@ class Game
                 echo "undo";
                 break;
             case "Pass":
-                echo "pass";
+                GameActions::swapPlayer();
                 break;
             default:
                 $this->restartGame();

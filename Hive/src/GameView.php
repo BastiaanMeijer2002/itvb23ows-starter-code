@@ -75,9 +75,7 @@ class GameView
                     Turn: <?php echo (GameState::getPlayer() == 0) ? "White" : "Black"; ?>
                 </div>
                 <form method="post" action="../index.php">
-                    <?php if (GameState::getGameId() !== null) {
-                        echo '<input type="hidden" name="game" value="'.GameState::getGameId().'" />';
-                    } ?>
+                    <?php self::getGameId(); ?>
                     <select name="piece">
                         <?php
                         $hand = GameState::getHand(GameState::getPlayer());
@@ -97,9 +95,7 @@ class GameView
                     <input type="submit" name="action" value="Play">
                 </form>
                 <form method="post" action="../index.php">
-                    <?php if (GameState::getGameId() !== null) {
-                        echo '<input type="hidden" name="game" value="'.GameState::getGameId().'" />';
-                    } ?>
+                    <?php self::getGameId(); ?>
                     <select name="from">
                         <?php
                         foreach (GameUtils::getPlayerTiles(GameState::getBoard()) as $pos => $data) {
@@ -116,12 +112,12 @@ class GameView
                     </select>
                     <input type="submit" name="action" value="Move">
                 </form>
-                <form method="post" action="pass.php">
+                <form method="post" action="../index.php">
                     <input type="submit" value="Pass">
                 </form>
                 <form method="post" action="../index.php">
-                    <input type="hidden" name="game" value="new" />
-                    <input type="submit" value="Restart">
+                    <?php self::getGameId(); ?>
+                    <input type="submit" name="Action" value="Pass">
                 </form>
                 <form method="post" action="undo.php">
                     <input type="submit" value="Undo">
@@ -189,4 +185,12 @@ class GameView
         }
     }
 
+    private static function getGameId(): void
+    {
+        if (GameState::getGameId() !== null) {
+            echo '<input type="hidden" name="game" value="' . GameState::getGameId() . '" />';
+        }
+    }
+
 }
+
