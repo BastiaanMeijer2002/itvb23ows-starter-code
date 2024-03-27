@@ -116,12 +116,14 @@ class GameView
                     </select>
                     <input type="submit" name="action" value="Move">
                 </form>
-                <form method="post" action="pass.php">
+                <form method="post" action="../index.php">
                     <input type="submit" value="Pass">
                 </form>
                 <form method="post" action="../index.php">
-                    <input type="hidden" name="game" value="new" />
-                    <input type="submit" value="Restart">
+                    <?php if (GameState::getGameId() !== null) {
+                        echo '<input type="hidden" name="game" value="'.GameState::getGameId().'" />';
+                    } ?>
+                    <input type="submit" name="Action" value="Pass">
                 </form>
                 <form method="post" action="undo.php">
                     <input type="submit" value="Undo">
