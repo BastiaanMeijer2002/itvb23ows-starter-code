@@ -8,10 +8,8 @@ class SoldierAnt implements Insect
     {
         $validity = false;
 
-        if ($from != $to) {
-            if (!isset($board[$to])) {
-                $validity = true;
-            }
+        if ($from != $to && !isset($board[$to])) {
+            $validity = true;
         }
 
         return $validity;
