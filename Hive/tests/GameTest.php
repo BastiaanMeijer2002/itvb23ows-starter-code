@@ -124,4 +124,73 @@ class GameTest extends TestCase
         $this->assertEquals(0, GameState::getPlayer());
     }
 
+    public function testContinueGamePlayWinsGame() {
+        $move = [
+            "game" => 1,
+            "piece" => "Q",
+            "to" => "0,0",
+            "action" => "Play"
+        ];
+
+        $this->gameActions->expects($this->once())
+            ->method("makePlay")
+            ->with($move["piece"], $move["to"])
+            ->willReturn(true);
+
+        GameState::setBoard([
+            '0,0' => [[1, "Q"]],
+            '0,1' => [[0, "B"]],
+            '0,-1' => [[0, "B"]],
+            '1,0' => [[0, "B"]],
+            '-1,0' => [[0, "B"]],
+            '-1,1' => [[0, "B"]],
+            '1,-1' => [[0, "B"]]
+        ]);
+
+        $gameMock = $this->getMockBuilder(Game::class)
+            ->setConstructorArgs([$this->database, $this->gameActions])
+            ->onlyMethods(['handleWin']) // Specify the method to mock
+            ->getMock();
+
+        $gameMock->expects($this->once())
+            ->method("handleWin");
+
+        $gameMock->continueGame($move);
+    }
+
+    public function testContinueGamePlayDoesntWisGame() {
+        $move = [
+            "game" => 1,
+            "piece" => "Q",
+            "to" => "0,0",
+            "action" => "Play"
+        ];
+
+        $this->gameActions->expects($this->once())
+            ->method("makePlay")
+            ->with($move["piece"], $move["to"])
+            ->willReturn(true);
+
+        GameState::setBoard([
+            '0,0' => [[1, "Q"]],
+            '0,1' => [[0, "B"]],
+            '0,-1' => [[0, "B"]],
+            '1,0' => [[1, "B"]],
+            '-1,0' => [[0, "B"]],
+            '-1,1' => [[0, "B"]],
+            '1,-1' => [[0, "B"]]
+        ]);
+
+        $gameMock = $this->getMockBuilder(Game::class)
+            ->setConstructorArgs([$this->database, $this->gameActions])
+            ->onlyMethods(['handleWin'])
+            ->getMock();
+
+        $gameMock->expects($this->once())
+            ->method("handleWin");
+
+        $gameMock->continueGame($move);
+    }
+
+
 }

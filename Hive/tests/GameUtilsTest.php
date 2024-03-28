@@ -74,7 +74,7 @@ class GameUtilsTest extends TestCase
             '1,-1' => [[0, "B"]]
         ];
 
-        $result = GameUtils::checkWin();
+        $result = GameUtils::checkWin($board);
 
         $this->assertEquals(0, $result);
     }
@@ -90,7 +90,7 @@ class GameUtilsTest extends TestCase
             '1,-1' => [[0, "B"]]
         ];
 
-        $result = GameUtils::checkWin();
+        $result = GameUtils::checkWin($board);
 
         $this->assertEquals(null, $result);
     }
@@ -106,7 +106,7 @@ class GameUtilsTest extends TestCase
             '1,-1' => [[1, "B"]]
         ];
 
-        $result = GameUtils::checkWin();
+        $result = GameUtils::checkWin($board);
 
         $this->assertEquals(1, $result);
     }
@@ -115,7 +115,7 @@ class GameUtilsTest extends TestCase
         $targetCoordinate = "0,0";
         $expectedCoords = ["0,1", "0,-1", "1,0", "-1,0", "-1,1", "1,-1"];
 
-        $actualCoords = GameUtils::getSurroundingTiles();
+        $actualCoords = GameUtils::getSurroundingTiles($targetCoordinate);
 
         $this->assertEquals($expectedCoords, $actualCoords);
     }

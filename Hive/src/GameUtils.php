@@ -4,14 +4,45 @@ namespace HiveGame;
 
 class GameUtils
 {
-    public static function checkWin(): ?int
+    public static function checkWin($board): ?int
     {
+        $countPlayer1 = 0;
+        $countPlayer2 = 0;
 
-        return null;
+        foreach ($board as $tile) {
+            if ($tile[0][0] == 0) {
+                $countPlayer1++;
+            } else {
+                $countPlayer2++;
+            }
+        }
+
+        if ($countPlayer1 == 6) {
+            return 0;
+        } elseif ($countPlayer2 == 6) {
+            return 1;
+        } else {
+            return null;
+        }
+
     }
 
-    public static function getSurroundingTiles(): array
+    public static function getSurroundingTiles($target): array
     {
+        $targetCoords = explode(",", $target);
+        $x = $targetCoords[0];
+        $y = $targetCoords[1];
+
+        $offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
+        $surroundingCoords = [];
+
+        foreach ($offsets as $offset) {
+            $surroundingX = $x + $offset[0];
+            $surroundingY = $y + $offset[1];
+            $surroundingCoords[] = $surroundingX .",". $surroundingY;
+        }
+
+        return $surroundingCoords;
     }
 
 
