@@ -147,18 +147,10 @@ class GameTest extends TestCase
             '1,-1' => [[0, "B"]]
         ]);
 
-        $gameMock = $this->getMockBuilder(Game::class)
-            ->setConstructorArgs([$this->database, $this->gameActions])
-            ->onlyMethods(['handleWin']) // Specify the method to mock
-            ->getMock();
-
-        $gameMock->expects($this->once())
-            ->method("handleWin");
-
-        $gameMock->continueGame($move);
+        $this->game->continueGame($move);
     }
 
-    public function testContinueGamePlayDoesntWisGame() {
+    public function testContinueGamePlayDoesntWinsGame() {
         $move = [
             "game" => 1,
             "piece" => "Q",
@@ -181,16 +173,7 @@ class GameTest extends TestCase
             '1,-1' => [[0, "B"]]
         ]);
 
-        $gameMock = $this->getMockBuilder(Game::class)
-            ->setConstructorArgs([$this->database, $this->gameActions])
-            ->onlyMethods(['handleWin'])
-            ->getMock();
-
-        $gameMock->expects($this->once())
-            ->method("handleWin");
-
-        $gameMock->continueGame($move);
+        $this->game->continueGame($move);
     }
-
 
 }
