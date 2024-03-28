@@ -56,6 +56,10 @@ class GameTest extends TestCase
             "action" => "Play"
         ];
 
+        $this->database->expects($this->once())
+            ->method("createGame")
+            ->willReturn("1");
+
         $this->gameActions->expects($this->once())
             ->method("makePlay")
             ->with($move["piece"], $move["to"])
@@ -82,6 +86,10 @@ class GameTest extends TestCase
             "to" => "0,1",
             "action" => "Move"
         ];
+
+        $this->database->expects($this->once())
+            ->method("createGame")
+            ->willReturn("1");
 
         $this->gameActions->expects($this->once())
             ->method("makeMove")
@@ -123,4 +131,74 @@ class GameTest extends TestCase
         $this->assertFalse($play);
         $this->assertEquals(0, GameState::getPlayer());
     }
+
+    public function testContinueGamePlayWinsGame() {
+        $move = [
+            "game" => 1,
+            "piece" => "Q",
+            "to" => "0,0",
+            "action" => "Play"
+        ];
+
+        $this->gameActions->expects($this->once())
+            ->method("makePlay")
+            ->with($move["piece"], $move["to"])
+            ->willReturn(true);
+
+        GameState::setBoard([
+            '0,0' => [[1, "Q"]],
+            '0,1' => [[0, "B"]],
+            '0,-1' => [[0, "B"]],
+            '1,0' => [[0, "B"]],
+            '-1,0' => [[0, "B"]],
+            '-1,1' => [[0, "B"]],
+            '1,-1' => [[0, "B"]]
+        ]);
+
+        $gameMock = $this->getMockBuilder(Game::class)
+            ->setConstructorArgs([$this->database, $this->gameActions])
+            ->onlyMethods(['handleWin'])
+            ->getMock();
+
+        $gameMock->expects($this->once())
+            ->method("handleWin");
+
+        $gameMock->continueGame($move);
+    }
+
+    public function testContinueGameMoveWinsGame() {
+        $move = [
+            "game" => 1,
+            "piece" => "Q",
+            "from" => "0,0",
+            "to" => "0,1",
+            "action" => "Move"
+        ];
+
+        $this->gameActions->expects($this->once())
+            ->method("makeMove")
+            ->with("0,0", "0,1")
+            ->willReturn(true);
+
+        GameState::setBoard([
+            '0,0' => [[1, "Q"]],
+            '0,1' => [[0, "B"]],
+            '0,-1' => [[0, "B"]],
+            '1,0' => [[0, "B"]],
+            '-1,0' => [[0, "B"]],
+            '-1,1' => [[0, "B"]],
+            '1,-1' => [[0, "B"]]
+        ]);
+
+        $gameMock = $this->getMockBuilder(Game::class)
+            ->setConstructorArgs([$this->database, $this->gameActions])
+            ->onlyMethods(['handleWin'])
+            ->getMock();
+
+        $gameMock->expects($this->once())
+            ->method("handleWin");
+
+        $gameMock->continueGame($move);
+    }
+
 }

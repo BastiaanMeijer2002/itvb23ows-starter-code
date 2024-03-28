@@ -34,16 +34,20 @@ class Game
 
     public function continueGame($move): bool
     {
-        if (!count($move)) {return false;}
+        if (empty($move)) {return false;}
 
         $this->db->getGame($move["game"]);
 
         switch ($move["action"]) {
             case "Play":
                 $this->gameActions->makePlay($move["piece"], $move["to"]);
+                $state = GameUtils::checkWin(GameState::getBoard());
+                if ($state == 0 || $state == 1) {$this->handleWin($state);}
                 break;
             case "Move":
                 $this->gameActions->makeMove($move["from"], $move["to"]);
+                $state = GameUtils::checkWin(GameState::getBoard());
+                if ($state == 0 || $state == 1) {$this->handleWin($state);}
                 break;
             case "Undo":
                 echo "undo";
@@ -61,8 +65,17 @@ class Game
         return true;
     }
 
-    public function restartGame(): void {
+    public function restartGame(): void
+    {
         session_unset();
         $this->startGame();
     }
+
+    public function handleWin($player): void
+    {
+        session_unset();
+        GameState::setError("Player ".$player." won!!!!");
+        $this->startGame();
+    }
+
 }

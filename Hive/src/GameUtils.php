@@ -4,6 +4,60 @@ namespace HiveGame;
 
 class GameUtils
 {
+    public static function checkWin($board): ?int
+    {
+        $queenBeePlayer1 = self::findQueenBee($board, 0);
+        $queenBeePlayer2 = self::findQueenBee($board, 1);
+
+        $countPlayer1 = $queenBeePlayer2 ? self::countSurroundingTiles($board, $queenBeePlayer2, 0) : 0;
+        $countPlayer2 = $queenBeePlayer1 ? self::countSurroundingTiles($board, $queenBeePlayer1, 1) : 0;
+
+        $state = null;
+        if ($countPlayer1 == 6 && $countPlayer2 < 6) {
+            $state = 0;
+        } elseif ($countPlayer2 == 6 && $countPlayer1 < 6) {
+            $state = 1;
+        } elseif ($countPlayer1 == 6 && $countPlayer2 == 6) {
+            $state = 3;
+        }
+
+        return $state;
+    }
+
+    public static function findQueenBee($board, $player): ?string
+    {
+        foreach ($board as $tile => $item) {
+            if ($item[0][1] == "Q" && $item[0][0] == $player) {
+                return $tile;
+            }
+        }
+        return null;
+    }
+
+    public static function countSurroundingTiles($board, $queenBeeTile, $player): int
+    {
+        $count = 0;
+        $tiles = self::getSurroundingTiles($queenBeeTile);
+        foreach ($tiles as $tile) {
+            if ($board[$tile][0][0] == $player) {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+    public static function getSurroundingTiles($tile): array
+    {
+        $offsets = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
+        $surroundingTiles = [];
+        list($x, $y) = explode(",", $tile);
+        foreach ($offsets as $offset) {
+            $surroundingTiles[] = ($x + $offset[0]) . "," . ($y + $offset[1]);
+        }
+        return $surroundingTiles;
+    }
+
+
     public static function isNeighbour($a, $b): bool
     {
         $a = explode(',', $a);

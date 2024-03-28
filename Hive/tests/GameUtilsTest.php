@@ -62,4 +62,84 @@ class GameUtilsTest extends TestCase
 
         $this->assertFalse($result);
     }
+
+    public function testCheckWinPlayer1Valid() {
+        $board = [
+            '0,0' => [[1, "Q"]],
+            '0,1' => [[0, "B"]],
+            '0,-1' => [[0, "B"]],
+            '1,0' => [[0, "B"]],
+            '-1,0' => [[0, "B"]],
+            '-1,1' => [[0, "B"]],
+            '1,-1' => [[0, "B"]]
+        ];
+
+        $result = GameUtils::checkWin($board);
+
+        $this->assertEquals(0, $result);
+    }
+
+    public function testCheckWinInvalid() {
+        $board = [
+            '0,0' => [[1, "Q"]],
+            '0,1' => [[0, "B"]],
+            '0,-1' => [[1, "B"]],
+            '1,0' => [[0, "B"]],
+            '-1,0' => [[0, "B"]],
+            '-1,1' => [[1, "B"]],
+            '1,-1' => [[0, "B"]]
+        ];
+
+        $result = GameUtils::checkWin($board);
+
+        $this->assertEquals(null, $result);
+    }
+
+    public function testCheckWinPlayer2Valid() {
+        $board = [
+            '0,0' => [[0, "Q"]],
+            '0,1' => [[1, "B"]],
+            '0,-1' => [[1, "B"]],
+            '1,0' => [[1, "B"]],
+            '-1,0' => [[1, "B"]],
+            '-1,1' => [[1, "B"]],
+            '1,-1' => [[1, "B"]]
+        ];
+
+        $result = GameUtils::checkWin($board);
+
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCheckWinTie() {
+        $board = [
+            '0,0' => [[0, "Q"]],
+            '0,1' => [[1, "B"]],
+            '0,-1' => [[1, "B"]],
+            '1,0' => [[1, "B"]],
+            '-1,0' => [[1, "B"]],
+            '-1,1' => [[1, "B"]],
+            '1,-1' => [[1, "B"]],
+            '3,3' => [[1, "Q"]],
+            "3,4" => [[0, "B"]],
+            "3,2" => [[0, "B"]],
+            "4,3" => [[0, "B"]],
+            "2,3" => [[0, "B"]],
+            "2,4" => [[0, "B"]],
+            "4,2" => [[0, "B"]]
+        ];
+
+        $result = GameUtils::checkWin($board);
+
+        $this->assertEquals(3, $result);
+    }
+
+    public function testGetSurroundingTiles() {
+        $targetCoordinate = "0,0";
+        $expectedCoords = ["0,1", "0,-1", "1,0", "-1,0", "-1,1", "1,-1"];
+
+        $actualCoords = GameUtils::getSurroundingTiles($targetCoordinate);
+
+        $this->assertEquals($expectedCoords, $actualCoords);
+    }
 }
