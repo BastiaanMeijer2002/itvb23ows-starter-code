@@ -42,17 +42,12 @@ class Game
             case "Play":
                 $this->gameActions->makePlay($move["piece"], $move["to"]);
                 $state = GameUtils::checkWin(GameState::getBoard());
-                echo 'printstate';
-                var_dump($state);
-                if ($state != null) {
-                    echo 'printstate1';
-                    $this->handleWin($state);
-                }
+                if ($state == 0 || $state == 1) {$this->handleWin($state);}
                 break;
             case "Move":
                 $this->gameActions->makeMove($move["from"], $move["to"]);
                 $state = GameUtils::checkWin(GameState::getBoard());
-                if ($state) {$this->handleWin($state);}
+                if ($state == 0 || $state == 1) {$this->handleWin($state);}
                 break;
             case "Undo":
                 echo "undo";
