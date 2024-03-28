@@ -34,7 +34,7 @@ class Game
 
     public function continueGame($move): bool
     {
-        if (!count($move)) {return false;}
+        if (empty($move)) {return false;}
 
         $this->db->getGame($move["game"]);
 
@@ -65,4 +65,5 @@ class Game
         session_unset();
         $this->startGame();
     }
+
 }

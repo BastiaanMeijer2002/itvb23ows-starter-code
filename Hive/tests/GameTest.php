@@ -123,4 +123,5 @@ class GameTest extends TestCase
         $this->assertFalse($play);
         $this->assertEquals(0, GameState::getPlayer());
     }
+
 }

@@ -4,6 +4,11 @@ namespace HiveGame;
 
 class GameUtils
 {
+    public static function checkWin(): ?int
+    {
+        return null;
+    }
+
     public static function isNeighbour($a, $b): bool
     {
         $a = explode(',', $a);

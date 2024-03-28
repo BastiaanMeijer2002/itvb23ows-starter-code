@@ -62,4 +62,52 @@ class GameUtilsTest extends TestCase
 
         $this->assertFalse($result);
     }
+
+    public function testCheckWinPlayer1Valid() {
+        $board = [
+            '0,0' => [[1, "Q"]],
+            '0,1' => [[0, "B"]],
+            '0,-1' => [[0, "B"]],
+            '1,0' => [[0, "B"]],
+            '-1,0' => [[0, "B"]],
+            '-1,1' => [[0, "B"]],
+            '1,-1' => [[0, "B"]]
+        ];
+
+        $result = GameUtils::checkWin();
+
+        $this->assertEquals(0, $result);
+    }
+
+    public function testCheckWinInvalid() {
+        $board = [
+            '0,0' => [[1, "Q"]],
+            '0,1' => [[0, "B"]],
+            '0,-1' => [[1, "B"]],
+            '1,0' => [[0, "B"]],
+            '-1,0' => [[0, "B"]],
+            '-1,1' => [[1, "B"]],
+            '1,-1' => [[0, "B"]]
+        ];
+
+        $result = GameUtils::checkWin();
+
+        $this->assertEquals(null, $result);
+    }
+
+    public function testCheckWinPlayer2Valid() {
+        $board = [
+            '0,0' => [[0, "Q"]],
+            '0,1' => [[1, "B"]],
+            '0,-1' => [[1, "B"]],
+            '1,0' => [[1, "B"]],
+            '-1,0' => [[1, "B"]],
+            '-1,1' => [[1, "B"]],
+            '1,-1' => [[1, "B"]]
+        ];
+
+        $result = GameUtils::checkWin();
+
+        $this->assertEquals(1, $result);
+    }
 }
