@@ -110,4 +110,13 @@ class GameUtilsTest extends TestCase
 
         $this->assertEquals(1, $result);
     }
+
+    public function testGetSurroundingTiles() {
+        $targetCoordinate = "0,0";
+        $expectedCoords = ["0,1", "0,-1", "1,0", "-1,0", "-1,1", "1,-1"];
+
+        $actualCoords = GameUtils::getSurroundingTiles();
+
+        $this->assertEquals($expectedCoords, $actualCoords);
+    }
 }
