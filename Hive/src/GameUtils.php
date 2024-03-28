@@ -12,15 +12,16 @@ class GameUtils
         $countPlayer1 = $queenBeePlayer2 ? self::countSurroundingTiles($board, $queenBeePlayer2, 0) : 0;
         $countPlayer2 = $queenBeePlayer1 ? self::countSurroundingTiles($board, $queenBeePlayer1, 1) : 0;
 
+        $state = null;
         if ($countPlayer1 == 6 && $countPlayer2 < 6) {
-            return 0;
+            $state = 0;
         } elseif ($countPlayer2 == 6 && $countPlayer1 < 6) {
-            return 1;
+            $state = 1;
         } elseif ($countPlayer1 == 6 && $countPlayer2 == 6) {
-            return 3;
+            $state = 3;
         }
 
-        return null;
+        return $state;
     }
 
     public static function findQueenBee($board, $player): ?string
