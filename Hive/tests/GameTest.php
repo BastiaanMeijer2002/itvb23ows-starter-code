@@ -56,10 +56,6 @@ class GameTest extends TestCase
             "action" => "Play"
         ];
 
-        $this->database->expects($this->once())
-            ->method("createGame")
-            ->willReturn("1");
-
         $this->gameActions->expects($this->once())
             ->method("makePlay")
             ->with($move["piece"], $move["to"])
@@ -87,9 +83,6 @@ class GameTest extends TestCase
             "action" => "Move"
         ];
 
-        $this->database->expects($this->once())
-            ->method("createGame")
-            ->willReturn("1");
 
         $this->gameActions->expects($this->once())
             ->method("makeMove")

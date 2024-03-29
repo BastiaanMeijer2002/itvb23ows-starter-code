@@ -62,7 +62,6 @@ class Database
         return $stmt->get_result();
     }
 
-
     public function createGame() {
         $this->getDb()->prepare('INSERT INTO games VALUES ()')->execute();
         return  $this->getDb()->insert_id;
@@ -78,6 +77,22 @@ class Database
 
         GameState::setGameId($id);
 
+    }
+
+    public function getPreviousState(int $game)
+    {
+        $move = $this->getMovesByGame($game)->fetch_array();
+
+        if (isset($move["previous_id"])) {
+            $stmt = $this->getDb()->prepare('SELECT * FROM moves WHERE id = ?');
+            $stmt->bind_param('i', $game);
+            $stmt->execute();
+            $result = $stmt->get_result()->fetch_array();
+
+            if (isset($result["state"])) {return $result["state"];}
+        }
+
+        return null;
     }
 
     /**

@@ -113,14 +113,15 @@ class GameView
                     <input type="submit" name="action" value="Move">
                 </form>
                 <form method="post" action="../index.php">
-                    <input type="submit" value="Pass">
+                    <input type="submit" name="action" value="Restart">
                 </form>
                 <form method="post" action="../index.php">
                     <?php self::getGameId(); ?>
-                    <input type="submit" name="Action" value="Pass">
+                    <input type="submit" name="action" value="Pass">
                 </form>
-                <form method="post" action="undo.php">
-                    <input type="submit" value="Undo">
+                <form method="post" action="../index.php">
+                    <?php self::getGameId(); ?>
+                    <input type="submit" name="action" value="Undo">
                 </form>
                 <strong><?php echo GameState::getError(); ?></strong>
             </body>

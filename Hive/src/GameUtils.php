@@ -39,9 +39,12 @@ class GameUtils
         $count = 0;
         $tiles = self::getSurroundingTiles($queenBeeTile);
         foreach ($tiles as $tile) {
-            if ($board[$tile][0][0] == $player) {
-                $count++;
+            if (isset($board[$tile][0][0])) {
+                if ($board[$tile][0][0] == $player) {
+                    $count++;
+                }
             }
+
         }
         return $count;
     }

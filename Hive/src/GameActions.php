@@ -90,4 +90,13 @@ class GameActions
         if ($hand[$piece] < 1) {unset($hand[$piece]);}
         GameState::setHand(GameState::getPlayer(), $hand);
     }
+
+    public function undoMove(): void
+    {
+        $previousState = $this->db->getPreviousState(GameState::getGameId());
+
+        if ($previousState != null) {
+            GameState::setState($previousState);
+        }
+    }
 }
