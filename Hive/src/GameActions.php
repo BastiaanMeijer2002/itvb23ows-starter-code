@@ -97,6 +97,18 @@ class GameActions
 
         if ($previousState != null) {
             GameState::setState($previousState);
+        } else {
+            self::setEmptyState();
         }
+
     }
+
+    public static function setEmptyState(): void
+    {
+        GameState::setPlayer1hand(["Q" => 1, "B" => 2, "S" => 2, "A" => 3, "G" => 3]);
+        GameState::setPlayer2hand(["Q" => 1, "B" => 2, "S" => 2, "A" => 3, "G" => 3]);
+        GameState::setBoard([]);
+        GameState::setPlayer(0);
+    }
+
 }

@@ -51,6 +51,8 @@ class GameRulesTest extends TestCase
 
         $result = GameRules::validPlay($board, $to, $piece);
 
+        var_dump($result);
+
         $this->assertFalse($result);
     }
 
