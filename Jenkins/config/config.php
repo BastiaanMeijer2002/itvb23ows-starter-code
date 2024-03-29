@@ -103,3 +103,5 @@ curl_setopt($permissionsRequest, CURLOPT_USERPWD, "$username:$password");
 $response = curl_exec($permissionsRequest);
 var_dump($response);
 curl_close($permissionsRequest);
+
+
