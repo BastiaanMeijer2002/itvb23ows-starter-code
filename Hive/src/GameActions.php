@@ -90,4 +90,25 @@ class GameActions
         if ($hand[$piece] < 1) {unset($hand[$piece]);}
         GameState::setHand(GameState::getPlayer(), $hand);
     }
+
+    public function undoMove(): void
+    {
+        $previousState = $this->db->getPreviousState(GameState::getGameId());
+
+        if ($previousState != null) {
+            GameState::setState($previousState);
+        } else {
+            self::setEmptyState();
+        }
+
+    }
+
+    public static function setEmptyState(): void
+    {
+        GameState::setPlayer1hand(["Q" => 1, "B" => 2, "S" => 2, "A" => 3, "G" => 3]);
+        GameState::setPlayer2hand(["Q" => 1, "B" => 2, "S" => 2, "A" => 3, "G" => 3]);
+        GameState::setBoard([]);
+        GameState::setPlayer(0);
+    }
+
 }

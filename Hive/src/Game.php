@@ -50,7 +50,7 @@ class Game
                 if ($state == 0 || $state == 1) {$this->handleWin($state);}
                 break;
             case "Undo":
-                echo "undo";
+                $this->gameActions->undoMove();
                 break;
             case "Pass":
                 GameActions::swapPlayer();
@@ -73,9 +73,11 @@ class Game
 
     public function handleWin($player): void
     {
-        session_unset();
-        GameState::setError("Player ".$player." won!!!!");
-        $this->startGame();
+        if ($player < 3) {
+            echo "Player ".$player." won!";
+        } else {
+            echo "It's a tie";
+        }
     }
 
 }
