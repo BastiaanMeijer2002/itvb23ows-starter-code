@@ -74,7 +74,7 @@ class GameActions
         return $validity;
     }
 
-    private function swapPlayer(): void
+    public static function swapPlayer(): void
     {
         if (GameState::getPlayer() == 0) {
             GameState::setPlayer(1);
